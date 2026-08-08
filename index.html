@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    <!-- Marked JS (Para procesar Markdown a HTML) -->
+    <!-- Marked JS -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -113,7 +113,7 @@
                 
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/50 pb-4">
                     <span class="text-xs font-mono text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                        <i data-lucide="calculator" class="w-4 h-4 text-blue-500"></i> Problema
+                        <i data-lucide="calculator" class="w-4 h-4 text-blue-500"></i> Enunciado del Problema
                     </span>
                     <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                         Dificultad: Fácil
@@ -283,67 +283,78 @@
             document.getElementById('solution-container').classList.add('hidden');
             document.getElementById('sol-btn-text').innerText = "Ver Solución Paso a Paso";
 
-            const a = Math.floor(Math.random() * 5) + 2;
-            const b = Math.floor(Math.random() * 4) + 1;
+            const k = Math.floor(Math.random() * 5) + 2;
+            const p = Math.floor(Math.random() * 3) + 2;
             const templates = [];
 
-            if (currentTopic.id === 'c1') {
-                templates.push({
-                    problem: `\\int_{1}^{\\infty} \\frac{${a}}{x^{${b+1}}} \\, dx`,
-                    solution: `
-1. Reescribir como límite:
-$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${a}x^{-${b+1}} \\, dx$$
-
-2. Calcular la antiderivada:
-$$\\int ${a}x^{-${b+1}} \\, dx = -\\frac{${a}}{${b}x^{${b}}}$$
-
-3. Evaluar el límite:
-$$\\lim_{t \\to \\infty} \\left[ -\\frac{${a}}{${b}t^{${b}}} + \\frac{${a}}{${b}(1)^{${b}}} \\right] = 0 + \\frac{${a}}{${b}}$$
-
-**Conclusión:** La integral **converge** a $\\frac{${a}}{${b}}$.
-`
-                });
-                templates.push({
-                    problem: `\\int_{0}^{\\infty} x e^{-${a}x} \\, dx`,
-                    solution: `
-1. Aplicar integración por partes:
-   * $u = x \\Rightarrow du = dx$
-   * $dv = e^{-${a}x}dx \\Rightarrow v = -\\frac{1}{${a}}e^{-${a}x}$
-
-2. Formular la integral:
-$$\\int x e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\int -\\frac{1}{${a}}e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\frac{1}{${a*a}}e^{-${a}x}$$
-
-3. Evaluar el límite de $0$ a $\\infty$:
-$$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${a}}e^{-${a}t} - \\frac{1}{${a*a}}e^{-${a}t} \\right) - \\left( 0 - \\frac{1}{${a*a}} \\right) = \\frac{1}{${a*a}}$$
-
-**Conclusión:** La integral **converge** a $\\frac{1}{${a*a}}$.
-`
-                });
-            } else if (currentTopic.id === 'c21') {
-                templates.push({
-                    problem: `f(x, y) = ${a}x^3 y^2 - \\cos(${b}x) + e^{y}`,
-                    solution: `
-1. Derivada parcial respecto a $x$ ($y$ tratada como constante):
-$$f_x(x,y) = ${a*3}x^2 y^2 + ${b}\\sin(${b}x)$$
-
-2. Derivada parcial respecto a $y$ ($x$ tratada como constante):
-$$f_y(x,y) = ${a*2}x^3 y + e^y$$
-`
-                });
-            } else {
-                templates.push({
-                    problem: `\\iint_R (${a}x + ${b}y^2) \\, dA \\quad \\text{donde } R = [0, 1] \\times [0, 2]`,
-                    solution: `
-1. Plantear la integral iterada:
-$$\\int_{0}^{1} \\int_{0}^{2} (${a}x + ${b}y^2) \\, dy \\, dx$$
-
-2. Integrar primero respecto a $y$:
-$$\\int_{0}^{2} (${a}x + ${b}y^2) dy = \\left[ ${a}xy + \\frac{${b}}{3}y^3 \\right]_0^2 = ${a*2}x + \\frac{${b*8}}{3}$$
-
-3. Integrar respecto a $x$:
-$$\\int_{0}^{1} \\left( ${a*2}x + \\frac{${b*8}}{3} \\right) dx = \\left[ ${a}x^2 + \\frac{${b*8}}{3}x \\right]_0^1 = ${a} + \\frac{${b*8}}{3}$$
-`
-                });
+            // Lógica por Capítulos y Dificultad Dinámica
+            if (currentTopic.chap === 1) {
+                if (currentDifficulty === 'easy') {
+                    templates.push({
+                        problem: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
+                        solution: `1. Reescribir como límite:\n$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${k}x^{-${p}} \\, dx$$\n\n2. Calcular antiderivada:\n$$\\int ${k}x^{-${p}} \\, dx = \\left[ -\\frac{${k}}{${p-1}x^{${p-1}}} \\right]_{1}^{t}$$\n\n3. Evaluar el límite:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{${k}}{${p-1}t^{${p-1}}} \\right) - \\left( -\\frac{${k}}{${p-1}} \\right) = \\frac{${k}}{${p-1}}$$\n\n**Resultado:** La integral **converge** a $\\frac{${k}}{${p-1}}$.`
+                    });
+                    templates.push({
+                        problem: `\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}`,
+                        solution: `1. Aplicar el Criterio de la Serie $p$.\n2. Para una serie $\\sum \\frac{1}{n^p}$, esta converge si y solo si $p > 1$.\n3. Como $p = ${p} > 1$, la serie **converge absolutamente**.`
+                    });
+                } else if (currentDifficulty === 'medium') {
+                    templates.push({
+                        problem: `\\int_{0}^{\\infty} x e^{-${k}x} \\, dx`,
+                        solution: `1. Integrar por partes: $u = x \\Rightarrow du = dx$ y $dv = e^{-${k}x}dx \\Rightarrow v = -\\frac{1}{${k}}e^{-${k}x}$.\n\n2. Antiderivada:\n$$\\int x e^{-${k}x} dx = -\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k*k}}e^{-${k}x}$$\n\n3. Evaluar el límite de $0$ a $\\infty$:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${k}}e^{-${k}t} - \\frac{1}{${k*k}}e^{-${k}t} \\right) - \\left( 0 - \\frac{1}{${k*k}} \\right) = \\frac{1}{${k*k}}$$\n\n**Resultado:** Converge a $\\frac{1}{${k*k}}$.`
+                    });
+                    templates.push({
+                        problem: `\\int_{2}^{\\infty} \\frac{dx}{x \\ln(x)^{${p}}}`,
+                        solution: `1. Hacer sustitución $u = \\ln(x) \\Rightarrow du = \\frac{1}{x}dx$.\n2. Los límites cambian: $x=2 \\Rightarrow u=\\ln(2)$ y $x\\to\\infty \\Rightarrow u\\to\\infty$.\n\n3. Calcular la integral:\n$$\\int_{\\ln(2)}^{\\infty} u^{-${p}} du = \\left[ -\\frac{1}{${p-1}u^{${p-1}}} \\right]_{\\ln(2)}^{\\infty} = \\frac{1}{${p-1}(\\ln 2)^{${p-1}}}$$\n\n**Resultado:** La integral **converge**.`
+                    });
+                } else { // Hard
+                    templates.push({
+                        problem: `\\int_{0}^{\\infty} \\frac{dx}{x^2 + ${k*k}}`,
+                        solution: `1. Reconocer la antiderivada de la arcotangente:\n$$\\int \\frac{dx}{x^2 + a^2} = \\frac{1}{a} \\arctan\\left(\\frac{x}{a}\\right)$$\n\n2. Planteamiento con límite:\n$$\\lim_{t \\to \\infty} \\left[ \\frac{1}{${k}} \\arctan\\left(\\frac{x}{${k}}\\right) \\right]_{0}^{t}$$\n\n3. Evaluar:\n$$\\frac{1}{${k}} \\left( \\frac{\\pi}{2} - 0 \\right) = \\frac{\\pi}{${2*k}}$$\n\n**Resultado:** Converge a $\\frac{\\pi}{${2*k}}$.`
+                    });
+                    templates.push({
+                        problem: `\\sum_{n=1}^{\\infty} \\frac{(${k})^n n!}{(2n)!}`,
+                        solution: `1. Aplicar Criterio de la Razón (D'Alembert):\n$$L = \\lim_{n \\to \\infty} \\left| \\frac{a_{n+1}}{a_n} \\right| = \\lim_{n \\to \\infty} \\frac{${k}^{n+1} (n+1)!}{(2n+2)!} \\cdot \\frac{(2n)!}{${k}^n n!}$$\n\n2. Simplificar factores:\n$$L = \\lim_{n \\to \\infty} \\frac{${k}(n+1)}{(2n+2)(2n+1)} = 0$$\n\n3. Como $L = 0 < 1$, la serie **converge absolutamente**.`
+                    });
+                }
+            } else if (currentTopic.chap === 2) {
+                if (currentDifficulty === 'easy') {
+                    templates.push({
+                        problem: `f(x, y) = ${k}x^3 y^2 - ${p}x + y^4`,
+                        solution: `1. Derivada parcial respecto a $x$ ($y$ constante):\n$$f_x = ${k*3}x^2 y^2 - ${p}$$\n\n2. Derivada parcial respecto a $y$ ($x$ constante):\n$$f_y = ${k*2}x^3 y + 4y^3$$`
+                    });
+                    templates.push({
+                        problem: `\\text{Hallar el dominio de } f(x, y) = \\sqrt{${k*k} - x^2 - y^2}`,
+                        solution: `1. La expresión dentro de la raíz debe ser no negativa:\n$$${k*k} - x^2 - y^2 \\ge 0$$\n\n2. Despejar:\n$$x^2 + y^2 \\le ${k*k}$$\n\n**Resultado:** El dominio es un disco cerrado en el origen con radio $R = ${k}$.`
+                    });
+                } else if (currentDifficulty === 'medium') {
+                    templates.push({
+                        problem: `f(x, y) = \\ln(x^2 + ${k}y^2) \\quad \\text{Calcular } \\nabla f(1, 1)`,
+                        solution: `1. Derivadas parciales:\n$$f_x = \\frac{2x}{x^2 + ${k}y^2}, \\quad f_y = \\frac{${2*k}y}{x^2 + ${k}y^2}$$\n\n2. Evaluar en el punto $(1, 1)$:\n$$f_x(1,1) = \\frac{2}{1 + ${k}} = \\frac{2}{${k+1}}$$\n$$f_y(1,1) = \\frac{${2*k}}{1 + ${k}} = \\frac{${2*k}}{${k+1}}$$\n\n**Resultado:** $\\nabla f(1,1) = \\left( \\frac{2}{${k+1}}, \\frac{${2*k}}{${k+1}} \\right)$.`
+                    });
+                } else { // Hard
+                    templates.push({
+                        problem: `f(x, y) = x^3 + y^3 - ${3*k}xy \\quad \\text{Clasificar puntos críticos}`,
+                        solution: `1. Gradiente igual a cero:\n$$f_x = 3x^2 - ${3*k}y = 0 \\Rightarrow y = \\frac{x^2}{${k}}$$\n$$f_y = 3y^2 - ${3*k}x = 0$$\n\n2. Puntos críticos: $(0,0)$ y $(${k}, ${k})$.\n3. Segundas derivadas y Hessiano $D = f_{xx}f_{yy} - (f_{xy})^2 = (6x)(6y) - (-${3*k})^2$.\n* En $(0,0)$: $D = -${9*k*k} < 0 \\Rightarrow$ **Punto Silla**.\n* En $(${k}, ${k})$: $D = 36(${k})^2 - 9(${k})^2 > 0$ y $f_{xx} > 0 \\Rightarrow$ **Mínimo Local**.`
+                    });
+                }
+            } else { // Capítulo 3: Integrales Múltiples
+                if (currentDifficulty === 'easy') {
+                    templates.push({
+                        problem: `\\int_{0}^{${k}} \\int_{0}^{1} (${p}x + y) \\, dy \\, dx`,
+                        solution: `1. Integrar respecto a $y$:\n$$\\int_{0}^{1} (${p}x + y) dy = \\left[ ${p}xy + \\frac{y^2}{2} \\right]_0^1 = ${p}x + \\frac{1}{2}$$\n\n2. Integrar respecto a $x$:\n$$\\int_{0}^{${k}} \\left(${p}x + \\frac{1}{2}\\right) dx = \\left[ \\frac{${p}x^2}{2} + \\frac{x}{2} \\right]_0^{${k}} = \\frac{${p*k*k} + ${k}}{2}$$`
+                    });
+                } else if (currentDifficulty === 'medium') {
+                    templates.push({
+                        problem: `\\iint_R \\sqrt{x^2 + y^2} \\, dA \\quad \\text{donde } R = \\{ (x,y) : x^2 + y^2 \\le ${k*k}, x \\ge 0 \\}`,
+                        solution: `1. Pasar a coordenadas polares: $r \\in [0, ${k}]$ y $\\theta \\in [-\\pi/2, \\pi/2]$.\n2. Jakobiano $dA = r \\, dr \\, d\\theta$.\n\n3. Calcular:\n$$\\int_{-\\pi/2}^{\\pi/2} d\\theta \\int_{0}^{${k}} r \\cdot r \\, dr = \\pi \\left[ \\frac{r^3}{3} \\right]_0^{${k}} = \\frac{${k*k*k}\\pi}{3}$$`
+                    });
+                } else { // Hard
+                    templates.push({
+                        problem: `\\iiint_E (x^2 + y^2 + z^2) \\, dV \\quad \\text{en la esfera } x^2 + y^2 + z^2 \\le ${k*k}`,
+                        solution: `1. Usar coordenadas esféricas: $\\rho \\in [0, ${k}], \\theta \\in [0, 2\\pi], \\phi \\in [0, \\pi]$.\n2. Elemento de volumen $dV = \\rho^2 \\sin\\phi \\, d\\rho \\, d\\theta \\, d\\phi$.\n\n3. Integral:\n$$\\int_{0}^{2\\pi} d\\theta \\int_{0}^{\\pi} \\sin\\phi \\, d\\phi \\int_{0}^{${k}} \\rho^4 \\, d\\rho = (2\\pi)(2)\\left( \\frac{${k}^5}{5} \\right) = \\frac{4\\pi ${Math.pow(k, 5)}}{5}$$`
+                    });
+                }
             }
 
             const selected = templates[Math.floor(Math.random() * templates.length)];
