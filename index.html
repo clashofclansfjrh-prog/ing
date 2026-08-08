@@ -287,54 +287,135 @@
             const p = Math.floor(Math.random() * 3) + 2;
             const templates = [];
 
-            // Selección exacta por ID de clase (evita mezclar integrales con series)
+            // Banco Generador Dinámico por ID de Clase y Dificultad
             switch (currentTopic.id) {
-                // CLASE 01: Integrales Impropias Tipo I
-                case 'c1':
+                // INTEGRALES IMPROPIAS
+                case 'c1': // Tipo I
                     if (currentDifficulty === 'easy') {
                         templates.push({
                             problem: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
-                            solution: `1. Reescribir como límite:\n$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${k}x^{-${p}} \\, dx$$\n\n2. Antiderivada:\n$$\\int ${k}x^{-${p}} \\, dx = \\left[ -\\frac{${k}}{${p-1}x^{${p-1}}} \\right]_{1}^{t}$$\n\n3. Evaluar el límite:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{${k}}{${p-1}t^{${p-1}}} \\right) - \\left( -\\frac{${k}}{${p-1}} \\right) = \\frac{${k}}{${p-1}}$$\n\n**Conclusión:** La integral **converge** a $\\frac{${k}}{${p-1}}$.`
-                        });
-                        templates.push({
-                            problem: `\\int_{0}^{\\infty} e^{-${k}x} \\, dx`,
-                            solution: `1. Formular el límite:\n$$\\lim_{t \\to \\infty} \\int_{0}^{t} e^{-${k}x} \\, dx$$\n\n2. Antiderivada:\n$$\\left[ -\\frac{1}{${k}}e^{-${k}x} \\right]_0^t = -\\frac{1}{${k}}e^{-${k}t} + \\frac{1}{${k}}$$\n\n3. Calcular el límite:\n$$\\lim_{t \\to \\infty} \\left(-\\frac{1}{${k}}e^{-${k}t} + \\frac{1}{${k}}\\right) = \\frac{1}{${k}}$$\n\n**Conclusión:** La integral **converge** a $\\frac{1}{${k}}$.`
+                            solution: `1. Reescribir como límite:\n$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${k}x^{-${p}} \\, dx$$\n\n2. Antiderivada:\n$$\\left[ -\\frac{${k}}{${p-1}x^{${p-1}}} \\right]_{1}^{t}$$\n\n3. Límite:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{${k}}{${p-1}t^{${p-1}}} \\right) + \\frac{${k}}{${p-1}} = \\frac{${k}}{${p-1}}$$\n\n**Resultado:** Converge a $\\frac{${k}}{${p-1}}$.`
                         });
                     } else if (currentDifficulty === 'medium') {
                         templates.push({
                             problem: `\\int_{0}^{\\infty} x e^{-${k}x} \\, dx`,
-                            solution: `1. Aplicar integración por partes:\n   * $u = x \\Rightarrow du = dx$\n   * $dv = e^{-${k}x}dx \\Rightarrow v = -\\frac{1}{${k}}e^{-${k}x}$\n\n2. Antiderivada:\n$$\\int x e^{-${k}x} dx = -\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k*k}}e^{-${k}x}$$\n\n3. Evaluar de $0$ a $\\infty$:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${k}}e^{-${k}t} - \\frac{1}{${k*k}}e^{-${k}t} \\right) - \\left( 0 - \\frac{1}{${k*k}} \\right) = \\frac{1}{${k*k}}$$\n\n**Conclusión:** La integral **converge** a $\\frac{1}{${k*k}}$.`
+                            solution: `1. Integración por partes: $u = x, dv = e^{-${k}x}dx \\Rightarrow v = -\\frac{1}{${k}}e^{-${k}x}$.\n2. Antiderivada: $-\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k*k}}e^{-${k}x}$.\n3. Evaluar de $0$ a $\\infty$ da $\\frac{1}{${k*k}}$.\n\n**Resultado:** Converge a $\\frac{1}{${k*k}}$.`
                         });
-                    } else { // Hard
+                    } else {
                         templates.push({
                             problem: `\\int_{2}^{\\infty} \\frac{dx}{x \\ln(x)^{${p}}}`,
-                            solution: `1. Cambio de variable $u = \\ln(x) \\Rightarrow du = \\frac{dx}{x}$.\n2. Nuevos límites: para $x=2 \\Rightarrow u=\\ln 2$, para $x \\to \\infty \\Rightarrow u \\to \\infty$.\n\n3. Integral en $u$:\n$$\\int_{\\ln 2}^{\\infty} u^{-${p}} \\, du = \\left[ -\\frac{1}{${p-1}u^{${p-1}}} \\right]_{\\ln 2}^{\\infty} = \\frac{1}{${p-1}(\\ln 2)^{${p-1}}}$$\n\n**Conclusión:** La integral **converge**.`
+                            solution: `1. Sustitución $u = \\ln(x) \\Rightarrow du = \\frac{dx}{x}$.\n2. Integral: $\\int_{\\ln 2}^{\\infty} u^{-${p}} du = \\frac{1}{${p-1}(\\ln 2)^{${p-1}}}$.\n\n**Resultado:** Converge.`
                         });
                     }
                     break;
 
-                // CLASE 06: Series y Sumas Parciales
-                case 'c6':
+                case 'c2': // Tipo II
                     templates.push({
-                        problem: `\\sum_{n=1}^{\\infty} \\frac{1}{n^{${p}}}`,
-                        solution: `1. Esta es una **p-serie** de la forma $\\sum \\frac{1}{n^p}$.\n2. Criterio: Converge si y solo si $p > 1$.\n3. Como $p = ${p} > 1$, la serie **converge**.`
+                        problem: `\\int_{0}^{${k}} \\frac{dx}{\\sqrt{${k} - x}}`,
+                        solution: `1. Asíntota en $x = ${k}$. Plantear límite:\n$$\\lim_{t \\to ${k}^-} \\int_{0}^{t} (${k} - x)^{-1/2} dx$$\n\n2. Antiderivada: $\\left[ -2\\sqrt{${k} - x} \\right]_0^t = -2\\sqrt{${k}-t} + 2\\sqrt{${k}}$.\n3. Tomar el límite cuando $t \\to ${k}^-$ nos da $2\\sqrt{${k}}$.\n\n**Resultado:** Converge a $2\\sqrt{${k}}$.`
                     });
                     break;
 
-                // CLASE 21: Derivadas Parciales
-                case 'c21':
+                // SUCESIONES Y SERIES
+                case 'c4': // Sucesiones y Límites
+                    templates.push({
+                        problem: `a_n = \\frac{${k}n^2 + 5}{${p}n^2 + n}`,
+                        solution: `1. Dividir numerador y denominador por $n^2$:\n$$\\lim_{n \\to \\infty} \\frac{${k} + \\frac{5}{n^2}}{${p} + \\frac{1}{n}} = \\frac{${k}}{${p}}$$\n\n**Resultado:** La sucesión converge a $\\frac{${k}}{${p}}$.`
+                    });
+                    break;
+
+                case 'c6': // Series y Sumas Parciales
+                    templates.push({
+                        problem: `\\sum_{n=1}^{\\infty} \\left( \\frac{1}{${k}} \\right)^n`,
+                        solution: `1. Serie geométrica con $a = 1/${k}$ y razón $r = 1/${k}$.\n2. Como $|r| < 1$, la serie converge.\n3. Suma: $S = \\frac{a}{1 - r} = \\frac{1/${k}}{1 - 1/${k}} = \\frac{1}{${k-1}}$.\n\n**Resultado:** Converge a $\\frac{1}{${k-1}}$.`
+                    });
+                    break;
+
+                case 'c10': // Criterios Raíz y Razón
+                    templates.push({
+                        problem: `\\sum_{n=1}^{\\infty} \\frac{(${k})^n}{n!}`,
+                        solution: `1. Criterio de la Razón:\n$$L = \\lim_{n \\to \\infty} \\frac{${k}^{n+1}}{(n+1)!} \\cdot \\frac{n!}{${k}^n} = \\lim_{n \\to \\infty} \\frac{${k}}{n+1} = 0$$\n2. Como $L = 0 < 1$, la serie **converge absolutamente**.`
+                    });
+                    break;
+
+                // VECTORES Y PLANOS (R3)
+                case 'c15': // Producto Punto y Cruz
+                    templates.push({
+                        problem: `\\vec{u} = \\langle ${k}, 1, -2 \\rangle, \\quad \\vec{v} = \\langle 0, ${p}, 3 \\rangle \\quad \\text{Calcular } \\vec{u} \\cdot \\vec{v}`,
+                        solution: `1. Producto escalar:\n$$\\vec{u} \\cdot \\vec{v} = (${k})(0) + (1)(${p}) + (-2)(3) = 0 + ${p} - 6 = ${p - 6}$$\n\n**Resultado:** ${p - 6}.`
+                    });
+                    break;
+
+                case 'c16': // Rectas y Planos
+                    templates.push({
+                        problem: `\\text{Plano que pasa por } P(0,0,0) \\text{ con normal } \\vec{n} = \\langle ${k}, -${p}, 1 \\rangle`,
+                        solution: `1. Ecuación del plano: $a(x-x_0) + b(y-y_0) + c(z-z_0) = 0$.\n2. Sustituir:\n$$${k}x - ${p}y + z = 0$$\n\n**Resultado:** $${k}x - ${p}y + z = 0$.`
+                    });
+                    break;
+
+                // DERIVADAS PARCIALES Y GRADIENTE
+                case 'c21': // Derivadas Parciales
                     templates.push({
                         problem: `f(x, y) = ${k}x^3 y^2 - ${p}x + y^4`,
-                        solution: `1. Derivada parcial respecto a $x$ ($y$ constante):\n$$f_x = ${k*3}x^2 y^2 - ${p}$$\n\n2. Derivada parcial respecto a $y$ ($x$ constante):\n$$f_y = ${k*2}x^3 y + 4y^3$$`
+                        solution: `1. Respecto a $x$ ($y$ cte):\n$$f_x = ${k*3}x^2 y^2 - ${p}$$\n\n2. Respecto a $y$ ($x$ cte):\n$$f_y = ${k*2}x^3 y + 4y^3$$`
                     });
                     break;
 
-                // Por defecto para cualquier otro tema no mapeado explícitamente
-                default:
+                case 'c26': // Gradiente
                     templates.push({
-                        problem: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
-                        solution: `1. Plantear el límite:\n$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${k}x^{-${p}} \\, dx$$\n2. Antiderivada y límite:\n$$\\lim_{t \\to \\infty} \\left[ -\\frac{${k}}{${p-1}x^{${p-1}}} \\right]_{1}^{t} = \\frac{${k}}{${p-1}}$$\n\n**Resultado:** La integral **converge** a $\\frac{${k}}{${p-1}}$.`
+                        problem: `f(x, y) = x^2 y + ${k}x \\quad \\text{en } P(1, 2)`,
+                        solution: `1. Derivadas parciales:\n$$f_x = 2xy + ${k}, \\quad f_y = x^2$$\n2. Evaluar en $(1,2)$:\n$$f_x(1,2) = 2(1)(2) + ${k} = ${4+k}, \\quad f_y(1,2) = 1$$\n\n**Resultado:** $\\nabla f(1,2) = \\langle ${4+k}, 1 \\rangle$.`
                     });
+                    break;
+
+                case 'c27': // Puntos Críticos
+                case 'c28':
+                    templates.push({
+                        problem: `f(x, y) = x^2 + y^2 - ${2*k}x`,
+                        solution: `1. Derivadas parciales:\n$$f_x = 2x - ${2*k} = 0 \\Rightarrow x = ${k}$$\n$$f_y = 2y = 0 \\Rightarrow y = 0$$\n2. Punto crítico: $(${k}, 0)$.\n3. Matriz Hessiana $D = f_{xx}f_{yy} - f_{xy}^2 = (2)(2) - 0 = 4 > 0$.\n4. Como $f_{xx} > 0$, es un **Mínimo Local** en $(${k}, 0)$.`
+                    });
+                    break;
+
+                // INTEGRALES MÚLTIPLES
+                case 'c32': // Integrales Dobles Rectángulos
+                    templates.push({
+                        problem: `\\int_{0}^{${k}} \\int_{0}^{1} (${p}x + y) \\, dy \\, dx`,
+                        solution: `1. Integrar respecto a $y$:\n$$\\int_{0}^{1} (${p}x + y) dy = \\left[ ${p}xy + \\frac{y^2}{2} \\right]_0^1 = ${p}x + \\frac{1}{2}$$\n2. Integrar respecto a $x$:\n$$\\int_{0}^{${k}} \\left(${p}x + \\frac{1}{2}\\right) dx = \\left[ \\frac{${p}x^2}{2} + \\frac{x}{2} \\right]_0^{${k}} = \\frac{${p*k*k} + ${k}}{2}$$`
+                    });
+                    break;
+
+                case 'c35': // Polares
+                    templates.push({
+                        problem: `\\iint_R (x^2 + y^2) \\, dA \\quad R: x^2 + y^2 \\le ${k*k}`,
+                        solution: `1. Pasar a polares: $r \\in [0, ${k}], \\theta \\in [0, 2\\pi]$, $dA = r \\, dr \\, d\\theta$.\n2. Sustituir $x^2 + y^2 = r^2$:\n$$\\int_{0}^{2\\pi} d\\theta \\int_{0}^{${k}} r^3 \\, dr = (2\\pi) \\left[ \\frac{r^4}{4} \\right]_0^{${k}} = \\frac{${Math.pow(k,4)}\\pi}{2}$$`
+                    });
+                    break;
+
+                case 'c39': // Esféricas
+                    templates.push({
+                        problem: `\\iiint_E dV \\quad \\text{Esfera } x^2 + y^2 + z^2 \\le ${k*k}`,
+                        solution: `1. Coordenadas esféricas: $\\rho \\in [0, ${k}], \\theta \\in [0, 2\\pi], \\phi \\in [0, \\pi]$.\n2. Jacobiano $dV = \\rho^2 \\sin\\phi \\, d\\rho \\, d\\theta \\, d\\phi$.\n$$\\int_{0}^{2\\pi} d\\theta \\int_{0}^{\\pi} \\sin\\phi \\, d\\phi \\int_{0}^{${k}} \\rho^2 \\, d\\rho = (2\\pi)(2)\\left( \\frac{${k}^3}{3} \\right) = \\frac{4\\pi ${k*k*k}}{3}$$`
+                    });
+                    break;
+
+                // DEFAULT DINÁMICO POR CAPÍTULO
+                default:
+                    if (currentTopic.chap === 1) {
+                        templates.push({
+                            problem: `a_n = \\frac{n + ${k}}{${p}n + 1}`,
+                            solution: `1. Límite al infinito:\n$$\\lim_{n \\to \\infty} \\frac{n + ${k}}{${p}n + 1} = \\frac{1}{${p}}$$\n\n**Resultado:** La sucesión converge a $\\frac{1}{${p}}$.`
+                        });
+                    } else if (currentTopic.chap === 2) {
+                        templates.push({
+                            problem: `f(x, y) = ${k}x^2 + ${p}y^2`,
+                            solution: `1. Derivadas parciales:\n$$f_x = ${2*k}x, \\quad f_y = ${2*p}y$$\n2. Gradiente: $\\nabla f(x, y) = \\langle ${2*k}x, ${2*p}y \\rangle$.`
+                        });
+                    } else {
+                        templates.push({
+                            problem: `\\int_{0}^{1} \\int_{0}^{${k}} ${p}xy \\, dx \\, dy`,
+                            solution: `1. Integrar respecto a $x$:\n$$\\int_{0}^{${k}} ${p}xy \\, dx = \\left[ \\frac{${p}x^2 y}{2} \\right]_0^{${k}} = \\frac{${p*k*k}y}{2}$$\n2. Integrar respecto a $y$:\n$$\\int_{0}^{1} \\frac{${p*k*k}y}{2} dy = \\frac{${p*k*k}}{4}$$`
+                        });
+                    }
                     break;
             }
 
