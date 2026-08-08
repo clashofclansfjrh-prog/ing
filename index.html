@@ -163,32 +163,23 @@
 
     <script>
         // --- 1. BASE DE DATOS DE CLASES (AMPLIADA) ---
-        const db = {
+      const db = {
             'MAT1620': [
                 { id: 'c1_mat1620', classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
-                { id: 'c2_mat1620', classNum: 'Clase 02', title: 'Integrales Impropias Tipo II', desc: 'Discontinuidades infinitas en el intervalo.' },
-                { id: 'c3_mat1620', classNum: 'Clase 03', title: 'Dominio y Curvas de Nivel', desc: 'Introducción a funciones de varias variables.' }
+                { id: 'c2_mat1620', classNum: 'Clase 02', title: 'Integrales Impropias Tipo II', desc: 'Discontinuidades en el intervalo.' },
+                { id: 'c3_mat1620', classNum: 'Clase 03', title: 'Funciones de Varias Variables', desc: 'Dominio y curvas de nivel.' }
             ],
             'MAT1203': [
-                { id: 'c1_mat1203', classNum: 'Clase 01', title: 'Geometría y Álgebra de Vectores', desc: 'Operaciones básicas en R2 y R3.' },
-                { id: 'c2_mat1203', classNum: 'Clase 02', title: 'Producto Punto y Cruz', desc: 'Aplicaciones geométricas de los productos vectoriales.' },
-                { id: 'c3_mat1203', classNum: 'Clase 05', title: 'Sistemas de Ecuaciones Lineales', desc: 'Representación matricial y escalonamiento.' }
+                { id: 'c1_mat1203', classNum: 'Clase 01', title: 'Geometría Vectorial', desc: 'Operaciones en R2 y R3.' },
+                { id: 'c2_mat1203', classNum: 'Clase 02', title: 'Producto Punto y Cruz', desc: 'Aplicaciones geométricas.' },
+                { id: 'c3_mat1203', classNum: 'Clase 05', title: 'Sistemas Lineales', desc: 'Sistemas de ecuaciones y matrices.' }
             ],
             'FIS1514': [
-                { id: 'c1_fis1514', classNum: 'Clase 01', title: 'Cinemática 1D', desc: 'Posición, velocidad y aceleración en una dimensión.' },
-                { id: 'c2_fis1514', classNum: 'Clase 03', title: 'Tiro Parabólico (2D)', desc: 'Movimiento en dos dimensiones bajo gravedad constante.' },
-                { id: 'c3_fis1514', classNum: 'Clase 07', title: 'Leyes de Newton', desc: 'Dinámica de la partícula y diagramas de cuerpo libre.' }
+                { id: 'c1_fis1514', classNum: 'Clase 01', title: 'Cinemática 1D', desc: 'Posición, velocidad y aceleración.' },
+                { id: 'c2_fis1514', classNum: 'Clase 03', title: 'Tiro Parabólico (2D)', desc: 'Movimiento en dos dimensiones.' },
+                { id: 'c3_fis1514', classNum: 'Clase 07', title: 'Leyes de Newton', desc: 'Fuerzas y dinámica de la partícula.' }
             ]
         };
-
-        let currentCourse = null;
-        let currentTopic = null;
-        let currentDifficulty = 'easy';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
-
         // --- 2. FUNCIONES DE INTERFAZ ---
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
 
@@ -296,10 +287,182 @@
 
         // --- 3. MOTOR DE GENERACIÓN DE EJERCICIOS ---
         function getRnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
+        // Función para elegir un signo aleatorio
+        function rSign() { return Math.random() < 0.5 ? 1 : -1; }
 
         function generateNewExercise() {
             document.getElementById('solution-container').classList.add('hidden');
             document.getElementById('sol-btn-text').innerText = "Ver Solución Paso a Paso";
+
+            // Variables aleatorias reutilizables
+            let k = getRnd(2, 9);
+            let p = getRnd(2, 7);
+            let m = getRnd(3, 10);
+            let n = getRnd(2, 5);
+            let s = rSign(); // Signo aleatorio +1 o -1
+            let sm = s === 1 ? '+' : '-';
+            
+            // EL MEGA DICCIONARIO DE EJERCICIOS
+            const exerciseTemplates = {
+                'MAT1620': {
+                    'c1_mat1620': { // Impropias Tipo I
+                        'easy': [
+                            { q: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`, a: `**Paso 1:** Reemplazar infinito: $\\lim_{t \\to \\infty} \\int_{1}^{t} ${k} x^{-${p}} \\, dx$ \n\n**Paso 2:** Integrar aplicando regla de potencias: $\\frac{${k} x^{-${p}+1}}{-${p}+1}$.\n\n**Paso 3:** Evaluar el límite. Si el exponente es negativo, el límite es 0 y converge.` },
+                            { q: `\\int_{0}^{\\infty} e^{-${k}x} \\, dx`, a: `**Paso 1:** Evaluar $\\lim_{t \\to \\infty} \\int_{0}^{t} e^{-${k}x} \\, dx$.\n\n**Paso 2:** La antiderivada es $-\\frac{1}{${k}}e^{-${k}x}$.\n\n**Paso 3:** Al evaluar en infinito da $0$, menos la evaluación en $0$, que da $\\frac{1}{${k}}$.` },
+                            { q: `\\int_{${k}}^{\\infty} \\frac{1}{x \\ln(x)} \\, dx`, a: `**Paso 1:** Sustitución $u = \\ln(x)$, $du = \\frac{1}{x}dx$.\n\n**Paso 2:** Queda $\\int \\frac{1}{u} du = \\ln|u| = \\ln|\\ln(x)|$.\n\n**Paso 3:** Al evaluar el límite en infinito, diverge.` }
+                        ],
+                        'medium': [
+                            { q: `\\int_{e}^{\\infty} \\frac{${k}}{x (\\ln x)^{${p}}} \\, dx`, a: `**Paso 1:** Usar sustitución $u = \\ln x$, $du = \\frac{1}{x}dx$.\n\n**Paso 2:** Los límites cambian de $1$ a $\\infty$. La integral es $\\lim_{t \\to \\infty} \\int_{1}^{t} \\frac{${k}}{u^{${p}}} du$.\n\n**Paso 3:** Resulta en $\\frac{${k}}{${p}-1}$. Converge.` },
+                            { q: `\\int_{-\\infty}^{\\infty} \\frac{${k}}{x^2 + ${p}^2} \\, dx`, a: `**Paso 1:** Separar en dos integrales en $x=0$.\n\n**Paso 2:** La antiderivada es $\\frac{${k}}{${p}}\\arctan\\left(\\frac{x}{${p}}\\right)$.\n\n**Paso 3:** Evaluar en $\\infty$ (da $\\pi/2$) y $-\\infty$ (da $-\\pi/2$). Resultado: $\\frac{${k}\\pi}{${p}}$.` }
+                        ],
+                        'hard': [
+                            { q: `\\int_{0}^{\\infty} x^{${k}} e^{-x} \\, dx`, a: `**Paso 1:** Esta es la estructura de la función Gamma $\\Gamma(n) = \\int_0^\\infty x^{n-1} e^{-x} dx$.\n\n**Paso 2:** Identificamos que $n-1 = ${k}$, entonces es $\\Gamma(${k+1})$.\n\n**Paso 3:** Para enteros, $\\Gamma(n) = (n-1)!$. Resultado: $${k}!$.` },
+                            { q: `\\int_{1}^{\\infty} \\frac{dx}{x^2 + ${k}x + ${p*k}}`, a: `**Paso 1:** Completar cuadrados en el denominador.\n\n**Paso 2:** Quedará una estructura de arcotangente $\\frac{1}{a}\\arctan(\\frac{x+h}{a})$.\n\n**Paso 3:** Evaluar el límite cuando $x \\to \\infty$.` }
+                        ]
+                    },
+                    'c2_mat1620': { // Impropias Tipo II
+                        'easy': [
+                            { q: `\\int_{0}^{${k}} \\frac{1}{\\sqrt{${k}-x}} \\, dx`, a: `**Paso 1:** La discontinuidad está en $x = ${k}$. Plantear $\\lim_{t \\to ${k}^-} \\int_{0}^{t} (\\dots)$.\n\n**Paso 2:** Sustitución $u = ${k}-x$. Antiderivada es $-2\\sqrt{${k}-x}$. Converge.` },
+                            { q: `\\int_{0}^{${p}} \\frac{1}{x^{1/${n}}} \\, dx`, a: `**Paso 1:** Discontinuidad en $x=0$. $\\lim_{t \\to 0^+} \\int_{t}^{${p}} x^{-1/${n}} dx$.\n\n**Paso 2:** Como $1/${n} < 1$, la integral por el criterio $p$ converge.` }
+                        ],
+                        'medium': [
+                            { q: `\\int_{0}^{${p}} \\frac{x}{x^2 - ${p}^2} \\, dx`, a: `**Paso 1:** Discontinuidad en $x = ${p}$. Límite $t \\to ${p}^-$.\n\n**Paso 2:** Sustitución $u = x^2 - ${p}^2$.\n\n**Paso 3:** La antiderivada involucra $\\ln|u|$. Al evaluar hacia $0$, diverge a $-\\infty$.` },
+                            { q: `\\int_{0}^{1} x^{${k}} \\ln(x) \\, dx`, a: `**Paso 1:** Discontinuidad asintótica en $x=0$.\n\n**Paso 2:** Integración por partes: $u=\\ln(x), dv=x^{${k}}dx$.\n\n**Paso 3:** Aplicar L'Hôpital para el límite $\\lim_{x \\to 0} x^{${k+1}}\\ln(x)$. Converge.` }
+                        ],
+                        'hard': [
+                            { q: `\\int_{0}^{3} \\frac{1}{(x-1)^{${p/3}}} \\, dx`, a: `**Paso 1:** Discontinuidad en el medio del intervalo ($x=1$). Dividir: $\\int_0^1 + \\int_1^3$.\n\n**Paso 2:** Analizar ambas integrales por separado.\n\n**Paso 3:** Si una diverge, toda la integral diverge.` },
+                            { q: `\\int_{0}^{\\pi/2} \\tan^{${k}}(x) \\, dx`, a: `**Paso 1:** La tangente tiene asíntota en $x = \\pi/2$.\n\n**Paso 2:** Rescribir como $\\frac{\\sin^{${k}}x}{\\cos^{${k}}x}$.\n\n**Paso 3:** Analizar por criterio de comparación en el límite. Diverge para $k \\geq 1$.` }
+                        ]
+                    },
+                    'c3_mat1620': { // Varias Variables
+                         'easy': [
+                            { q: `\\text{Halle el dominio de } f(x,y) = \\sqrt{${k*k} - x^2 - y^2}`, a: `**Análisis:** El interior de la raíz debe ser $\\geq 0$.\n\n$x^2 + y^2 \\leq ${k*k}$. Es un disco cerrado de radio ${k}$ centrado en el origen.` },
+                            { q: `\\text{Halle el dominio de } f(x,y) = \\ln(x + y - ${p})`, a: `**Análisis:** El argumento del logaritmo debe ser positivo ($>0$).\n\n$x + y - ${p} > 0 \\implies y > -x + ${p}$. Es el semiplano superior abierto respecto a la recta.` }
+                         ],
+                         'medium': [
+                            { q: `\\text{Describa las curvas de nivel de } f(x,y) = \\ln(y - ${k}x^2)`, a: `**Paso 1:** Igualar a constante: $f(x,y)=C$.\n\n**Paso 2:** $y - ${k}x^2 = e^C \\implies y = ${k}x^2 + K$. Son familias de parábolas abiertas hacia arriba.` },
+                            { q: `\\text{Dibuje el dominio de } f(x,y) = \\frac{1}{\\sqrt{x^2+y^2-${m}}}`, a: `**Análisis:** Denominador no nulo y raíz positiva implica estrictamente $x^2+y^2 > ${m}$.\n\nEs la región exterior abierta a la circunferencia de radio $\\sqrt{${m}}$.` }
+                         ],
+                         'hard': [
+                            { q: `\\text{Halle el dominio de } f(x,y) = \\frac{\\arcsin(x/${p})}{\\sqrt{y - x^2}}`, a: `**Condición 1:** $-1 \\leq x/${p} \\leq 1 \\implies -${p} \\leq x \\leq ${p}$ (Franja vertical).\n\n**Condición 2:** $y - x^2 > 0 \\implies y > x^2$ (Interior estricto de la parábola).\n\n**Dominio:** Intersección de ambas regiones.` },
+                            { q: `\\text{Curvas de nivel de } f(x,y) = \\frac{x^2 - y^2}{x^2 + y^2}`, a: `**Paso 1:** $C = \\frac{x^2 - y^2}{x^2 + y^2} \\implies C(x^2+y^2) = x^2-y^2$.\n\n**Paso 2:** Agrupar: $y^2(C+1) = x^2(1-C) \\implies y = \\pm x \\sqrt{\\frac{1-C}{1+C}}$.\n\n**Conclusión:** Son pares de rectas que pasan por el origen, excluyendo el $(0,0)$.` }
+                         ]
+                    }
+                },
+                'MAT1203': {
+                    'c1_mat1203': { // Geometría Vectorial
+                        'easy': [
+                            { q: `\\vec{u} = \\langle ${k}, ${s*p} \\rangle, \\vec{v} = \\langle ${m}, ${k} \\rangle. \\text{ Calcule } 3\\vec{u} - 2\\vec{v}`, a: `**Operación:** Escalar por vector y resta componente a componente.\n\n$3\\langle ${k}, ${s*p}\\rangle - 2\\langle ${m}, ${k}\\rangle = \\langle ${3*k} - ${2*m}, ${3*s*p} - ${2*k} \\rangle$` },
+                            { q: `\\text{Halle el punto medio entre } P(${k}, ${p}, -1) \\text{ y } Q(-${m}, 2, ${k})`, a: `**Fórmula:** $M = (\\frac{x_1+x_2}{2}, \\frac{y_1+y_2}{2}, \\frac{z_1+z_2}{2})$.\n\n$M = (\\frac{${k-m}}{2}, \\frac{${p+2}}{2}, \\frac{${k-1}}{2})$` }
+                        ],
+                        'medium': [
+                            { q: `\\text{Halle un vector unitario en la dirección opuesta a } \\vec{w} = \\langle ${k}, -${p}, ${m} \\rangle`, a: `**Paso 1:** Norma $||\\vec{w}|| = \\sqrt{${k}^2 + (-${p})^2 + ${m}^2} = \\sqrt{${k*k + p*p + m*m}}$.\n\n**Paso 2:** El vector unitario opuesto es $-\\frac{1}{||\\vec{w}||} \\vec{w}$.` },
+                            { q: `\\text{Encuentre la ecuación paramétrica de la recta que pasa por } (${k},${p},0) \\text{ con vector director } \\langle -1, ${m}, ${k} \\rangle`, a: `**Ecuaciones:**\n $x(t) = ${k} - t$\n $y(t) = ${p} + ${m}t$\n $z(t) = ${k}t$` }
+                        ],
+                        'hard': [
+                            { q: `\\text{Los puntos } A(0,0), B(${k},${p}), C(${m},${k}) \\text{ forman un paralelogramo ABCD. Halle las coordenadas de } D.`, a: `**Análisis:** En un paralelogramo, los vectores cumplen $\\vec{AB} = \\vec{DC}$.\n\n**Paso 1:** $\\vec{AB} = B - A = \\langle ${k}, ${p} \\rangle$.\n\n**Paso 2:** $C - D = \\vec{AB} \\implies D = C - \\vec{AB} = (${m-k}, ${k-p})$.` },
+                            { q: `\\text{Determine si los puntos } P(${k},1,2), Q(${p},2,4), R(${m},3,6) \\text{ son colineales.}`, a: `**Paso 1:** Formar vectores $\\vec{PQ}$ y $\\vec{PR}$.\n\n**Paso 2:** Ver si $\\vec{PQ} = k\\vec{PR}$ (si son múltiplos escalares). Si lo son, son colineales.` }
+                        ]
+                    },
+                    'c2_mat1203': { // Producto Punto y Cruz
+                        'easy': [
+                            { q: `\\vec{u} = \\langle ${k}, -1, 2 \\rangle, \\vec{v} = \\langle 0, ${p}, 1 \\rangle. \\text{ Calcule } \\vec{u} \\cdot \\vec{v}`, a: `**Producto punto:** Multiplicar componentes y sumar.\n\n$(${k})(0) + (-1)(${p}) + (2)(1) = ${2-p}$.` },
+                            { q: `\\text{Halle el ángulo entre } \\vec{i} + \\vec{j} \\text{ y } \\vec{i} + \\vec{k}`, a: `**Paso 1:** Producto punto: $\\langle 1,1,0\\rangle \\cdot \\langle 1,0,1\\rangle = 1$.\n\n**Paso 2:** Normas: $\\sqrt{2}$ y $\\sqrt{2}$.\n\n**Paso 3:** $\\cos(\\theta) = \\frac{1}{2} \\implies \\theta = 60^\\circ = \\pi/3$.` }
+                        ],
+                        'medium': [
+                            { q: `\\text{Halle } \\vec{u} \\times \\vec{v} \\text{ si } \\vec{u}=\\langle ${k}, 0, -1\\rangle, \\vec{v}=\\langle 1, ${p}, 0\\rangle`, a: `**Paso 1:** Plantear el determinante $3\\times3$ con $\\hat{i}, \\hat{j}, \\hat{k}$.\n\n**Paso 2:** $\\hat{i}(0 - (-${p})) - \\hat{j}(0 - (-1)) + \\hat{k}(${k*p} - 0) = \\langle ${p}, -1, ${k*p} \\rangle$.` },
+                            { q: `\\text{Encuentre } x \\text{ tal que } \\langle x, ${k}, ${p} \\rangle \\text{ sea ortogonal a } \\langle 2, -1, x \\rangle`, a: `**Análisis:** Producto punto debe ser cero.\n\n$2x - ${k} + ${p}x = 0 \\implies x(2+${p}) = ${k} \\implies x = \\frac{${k}}{${2+p}}$.` }
+                        ],
+                        'hard': [
+                            { q: `\\text{Halle el área del triángulo con vértices en } (0,0,0), (${k},${p},0) \\text{ y } (1,1,${m})`, a: `**Paso 1:** Formar vectores $\\vec{u}=\\langle ${k},${p},0\\rangle$ y $\\vec{v}=\\langle 1,1,${m}\\rangle$.\n\n**Paso 2:** Área = $\\frac{1}{2} || \\vec{u} \\times \\vec{v} ||$.\n\n**Paso 3:** Calcular la norma del vector resultante del cruce.` },
+                            { q: `\\text{Volumen del paralelepípedo definido por } \\vec{u}=\\langle 1,${k},0\\rangle, \\vec{v}=\\langle 0,1,${p}\\rangle, \\vec{w}=\\langle ${m},0,1\\rangle`, a: `**Concepto:** Triple producto escalar $|\\vec{u} \\cdot (\\vec{v} \\times \\vec{w})|$.\n\n**Cálculo:** Determinar el determinante $3\\times3$ con los tres vectores. El volumen es el valor absoluto de ese determinante.` }
+                        ]
+                    },
+                    'c3_mat1203': { // Sistemas Lineales
+                        'easy': [
+                            { q: `\\text{Resuelva: } \\begin{cases} x + y = ${k} \\\\ x - y = ${p} \\end{cases}`, a: `**Paso 1:** Sumar ecuaciones: $2x = ${k+p} \\implies x = ${(k+p)/2}$.\n\n**Paso 2:** Reemplazar en la primera: $y = ${k} - x = ${(k-p)/2}$.` },
+                            { q: `\\text{Escriba la matriz aumentada del sistema: } \\begin{cases} ${k}x - y + z = 1 \\\\ ${p}y + ${m}z = 0 \\end{cases}`, a: `**Resultado:**\n $$\\begin{bmatrix} ${k} & -1 & 1 & | & 1 \\\\ 0 & ${p} & ${m} & | & 0 \\end{bmatrix}$$` }
+                        ],
+                        'medium': [
+                            { q: `\\text{Halle } c \\text{ para que el sistema no tenga solución: } \\begin{cases} x + 2y = ${k} \\\\ 3x + cy = ${p} \\end{cases}`, a: `**Análisis:** Para no tener solución, las rectas deben ser paralelas no coincidentes.\n\n$\\frac{1}{3} = \\frac{2}{c} \\neq \\frac{${k}}{${p}}$. Por ende $c = 6$. (Si $k/p = 1/3$, serían infinitas).` },
+                            { q: `\\text{Resuelva mediante Gauss-Jordan: } \\begin{bmatrix} 1 & 1 & | & ${k} \\\\ 2 & 4 & | & ${p} \\end{bmatrix}`, a: `**Paso 1:** F2 = F2 - 2(F1) $\\implies \\begin{bmatrix} 1 & 1 & | & ${k} \\\\ 0 & 2 & | & ${p-2*k} \\end{bmatrix}$.\n\n**Paso 2:** Despejar $y$, luego $x$.` }
+                        ],
+                        'hard': [
+                            { q: `\\text{Dado el sistema homogéneo } AX=0 \\text{ donde } A = \\begin{bmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\\\ 7 & 8 & 9 \\end{bmatrix}. \\text{ Halle la dimensión de las soluciones.}`, a: `**Paso 1:** Escalonar. Fila 3 es combinación lineal de F1 y F2.\n\n**Paso 2:** El rango de la matriz es 2. Como hay 3 incógnitas, hay 1 variable libre.\n\n**Conclusión:** La solución es una recta que pasa por el origen (dimensión 1).` },
+                            { q: `\\text{Determine para qué valores de } k \\text{ el sistema tiene solución única:} \\\\ \\begin{cases} x + y + z = 1 \\\\ x + ky + z = 2 \\\\ x + y + k^2z = 3 \\end{cases}`, a: `**Análisis:** Solución única requiere determinante $\\neq 0$.\n\n**Paso 1:** $|A| = (k-1)(k^2-1) = (k-1)^2(k+1)$.\n\n**Paso 2:** El sistema tiene solución única para $k \\neq 1$ y $k \\neq -1$.` }
+                        ]
+                    },
+                },
+                'FIS1514': {
+                    'c1_fis1514': { // Cinemática 1D
+                        'easy': [
+                            { q: `x(t) = ${k}t^2 - ${p}t + 5. \\text{ Halle la velocidad en } t=2\\text{s}`, a: `**Paso 1:** Derivar posición: $v(t) = \\frac{dx}{dt} = ${2*k}t - ${p}$.\n\n**Paso 2:** Evaluar en $t=2$: $v(2) = ${2*k*2} - ${p} = ${2*k*2 - p}$ m/s.` },
+                            { q: `v(t) = ${m}t^3. \\text{ Halle la aceleración media entre } t=0 \\text{ y } t=2`, a: `**Fórmula:** $a_m = \\frac{\\Delta v}{\\Delta t} = \\frac{v(2) - v(0)}{2 - 0}$.\n\n$v(2) = ${m*8}$. $a_m = \\frac{${m*8}}{2} = ${m*4}$ m/s².` }
+                        ],
+                        'medium': [
+                            { q: `a(t) = ${k}t. \\text{ Si parte del reposo en } x=0, \\text{ halle } x(t)`, a: `**Paso 1:** Integrar para $v$: $v(t) = \\int ${k}t \\,dt = \\frac{${k}}{2}t^2$ (C=0 por reposo).\n\n**Paso 2:** Integrar para $x$: $x(t) = \\int \\frac{${k}}{2}t^2 \\,dt = \\frac{${k}}{6}t^3$.` },
+                            { q: `\\text{Un tren frena con aceleración constante desde } ${k*10} \\text{ m/s hasta detenerse en } ${p*10} \\text{ m. Halle la aceleración.}`, a: `**Ecuación de Torricelli:** $v_f^2 = v_0^2 + 2a\\Delta x$.\n\n$0 = (${k*10})^2 + 2a(${p*10}) \\implies a = -\\frac{${k*10*k*10}}{${2*p*10}}$ m/s².` }
+                        ],
+                        'hard': [
+                            { q: `v(x) = ${k}\\sqrt{x}. \\text{ Determine la aceleración en función de } x.`, a: `**Regla de la Cadena:** $a = \\frac{dv}{dt} = \\frac{dv}{dx} \\frac{dx}{dt} = v \\frac{dv}{dx}$.\n\n$a = (${k}x^{1/2}) \\cdot \\frac{d}{dx}(${k}x^{1/2}) = (${k}x^{1/2})(\\frac{${k}}{2}x^{-1/2}) = ${k*k/2}$ m/s². (Aceleración constante).` },
+                            { q: `\\text{La aceleración es } a = -kv^2. \\text{ Si } v(0)=v_0, \\text{ halle } v(t).`, a: `**Paso 1:** Ecuación diferencial $\\frac{dv}{dt} = -kv^2$.\n\n**Paso 2:** Separar variables: $\\frac{dv}{v^2} = -k \\, dt$.\n\n**Paso 3:** Integrar: $-\\frac{1}{v} = -kt + C$. Con $v(0)=v_0$, la solución es $v(t) = \\frac{v_0}{1 + v_0 kt}$.` }
+                        ]
+                    },
+                    'c2_fis1514': { // Tiro Parabólico
+                         'easy': [
+                            { q: `\\text{Un proyectil se lanza a } ${k*10}\\text{m/s} \\text{ con ángulo de } 30^\\circ. \\text{ Halle } v_{0x} \\text{ y } v_{0y}`, a: `**Descomposición:**\n$v_{0x} = v_0 \\cos(30^\\circ) = ${k*10} \\times \\frac{\\sqrt{3}}{2} = ${k*5}\\sqrt{3}$ m/s.\n$v_{0y} = v_0 \\sin(30^\\circ) = ${k*10} \\times \\frac{1}{2} = ${k*5}$ m/s.` },
+                            { q: `\\text{Se lanza un objeto horizontalmente. En el punto más alto de la parábola, ¿cuál es su aceleración?}`, a: `**Concepto:** En tiro parabólico libre en la Tierra (despreciando roce), la aceleración es constante en toda la trayectoria.\n\nLa aceleración es $\\vec{g} = 9.8 \\text{ m/s}^2$ hacia abajo.` }
+                         ],
+                         'medium': [
+                            { q: `\\text{Desde una torre de } ${m*10}\\text{m} \\text{ se lanza un objeto horizontalmente a } ${p}\\text{m/s}. \\text{ Halle la distancia horizontal máxima.}`, a: `**Paso 1 (Tiempo):** $y(t) = h - \\frac{1}{2}gt^2 = 0 \\implies t = \\sqrt{\\frac{2(${m*10})}{9.8}}$.\n\n**Paso 2 (Alcance):** $x = v_x t = ${p} \\times \\sqrt{\\frac{${2*m*10}}{9.8}}$ metros.` },
+                            { q: `\\text{Un proyectil alcanza una altura máxima de } ${k*5} \\text{ m. ¿Cuál es su velocidad vertical inicial? } (g \\approx 10)`, a: `**Fórmula de Altura Máxima:** $H = \\frac{v_{0y}^2}{2g}$.\n\n$${k*5} = \\frac{v_{0y}^2}{20} \\implies v_{0y}^2 = ${k*5*20} \\implies v_{0y} = \\sqrt{${k*100}}$ m/s.` }
+                         ],
+                         'hard': [
+                            { q: `\\text{Halle el ángulo de lanzamiento } \\theta \\text{ para que el alcance máximo horizontal sea igual a } ${k} \\text{ veces la altura máxima.}`, a: `**Fórmulas:** Alcance $R = \\frac{v_0^2 \\sin(2\\theta)}{g} = \\frac{v_0^2 2\\sin\\theta\\cos\\theta}{g}$. Altura $H = \\frac{v_0^2 \\sin^2\\theta}{2g}$.\n\n**Igualdad:** $R = ${k}H \\implies 2\\sin\\theta\\cos\\theta = ${k} \\frac{\\sin^2\\theta}{2}$.\n\n**Despeje:** $4\\cos\\theta = ${k}\\sin\\theta \\implies \\tan\\theta = \\frac{4}{${k}}$.` },
+                            { q: `\\text{Un cañón dispara colina arriba por una pendiente de inclinación } \\alpha. \\text{ Si dispara con ángulo } \\theta \\text{ respecto a la horizontal, halle las ecuaciones paramétricas orientadas al plano inclinado.}`, a: `**Ejes rotados:** Eje $X$ paralelo al plano, eje $Y$ perpendicular.\n\n$x(t) = v_0 \\cos(\\theta-\\alpha)t - \\frac{1}{2}g\\sin(\\alpha)t^2$\n $y(t) = v_0 \\sin(\\theta-\\alpha)t - \\frac{1}{2}g\\cos(\\alpha)t^2$` }
+                         ]
+                    },
+                    'c3_fis1514': { // Leyes de Newton
+                         'easy': [
+                            { q: `\\text{Una masa de } ${k} \\text{ kg descansa sobre un plano horizontal liso. Se le aplica una fuerza de } ${p*10} \\text{ N. Halle la aceleración.}`, a: `**Segunda Ley:** $F = ma$.\n\n$a = \\frac{F}{m} = \\frac{${p*10}}{${k}}$ m/s².` },
+                            { q: `\\text{Halle la tensión en el cable de un ascensor de } ${m*100} \\text{ kg que acelera hacia arriba a } ${p} \\text{ m/s².} (g=10)`, a: `**DCL:** $T$ arriba, $mg$ abajo.\n\n$T - mg = ma \\implies T = m(g+a) = ${m*100}(10 + ${p}) = ${m*100 * (10+p)}$ Newtons.` }
+                         ],
+                         'medium': [
+                            { q: `\\text{Un bloque de } ${k} \\text{ kg está en un plano inclinado a } 30^\\circ \\text{ con fricción dinámica } \\mu = 0.${p}. \\text{ Desciende acelerando. Halle } a.`, a: `**Ecuación de Movimiento:** $mg\\sin(30^\\circ) - f_k = ma$.\n\nFricción $f_k = \\mu N = \\mu mg\\cos(30^\\circ)$.\n\n$a = g(\\sin(30^\\circ) - 0.${p}\\cos(30^\\circ))$.` },
+                            { q: `\\text{Máquina de Atwood: Masas } m_1 = ${k} \\text{ kg y } m_2 = ${p} \\text{ kg. Halle la aceleración del sistema.} (m_1 > m_2)`, a: `**Sistema Acoplado:**\n $a = g \\frac{m_1 - m_2}{m_1 + m_2} = g \\frac{${k} - ${p}}{${k} + ${p}}$.` }
+                         ],
+                         'hard': [
+                            { q: `\\text{Una cuña de masa } M=${m} \\text{ resbala por un piso liso. Sobre ella hay un bloque de masa } m=${k} \\text{ que NO resbala respecto a la cuña. Halle la fuerza horizontal } F \\text{ aplicada a la cuña.}`, a: `**Análisis del bloque (sistema no inercial):** Para que no caiga, la fuerza normal y la fuerza inercial (pseudofuerza) deben equilibrar a $mg$.\n\nCondición: $a = g\\tan(\\theta)$.\n\n**Sistema completo:** $F = (M+m)a = (${m+k})g\\tan(\\theta)$.` },
+                            { q: `\\text{Un péndulo cuelga del techo de un auto que acelera horizontalmente a } ${k} \\text{ m/s². Halle el ángulo } \\theta \\text{ de desviación del péndulo.}`, a: `**DCL del Péndulo:** Tensión $T$ actúa en ángulo $\\theta$.\n\nEje Y: $T\\cos\\theta = mg$\n Eje X: $T\\sin\\theta = ma$\n\nDividiendo ecuaciones: $\\tan\\theta = \\frac{a}{g} = \\frac{${k}}{9.8}$.` }
+                         ]
+                    }
+                }
+            };
+
+            let selected = null;
+            if (exerciseTemplates[currentCourse] && 
+                exerciseTemplates[currentCourse][currentTopic.id] && 
+                exerciseTemplates[currentCourse][currentTopic.id][currentDifficulty]) {
+                
+                const variants = exerciseTemplates[currentCourse][currentTopic.id][currentDifficulty];
+                const variantIndex = getRnd(0, variants.length - 1);
+                selected = variants[variantIndex];
+            } else {
+                selected = { 
+                    q: `Ejercicio en construcción para \\text{${currentCourse}} - \\text{${currentDifficulty}}`, 
+                    a: `Estamos añadiendo más ejercicios a esta sección. Vuelve pronto.` 
+                };
+            }
+
+            const problemDiv = document.getElementById('math-problem');
+            problemDiv.innerHTML = `\\[ ${selected.q} \\]`;
+            renderMathInBox(problemDiv);
+
+            const solBox = document.getElementById('solution-box');
+            solBox.innerHTML = marked.parse(selected.a);
+            renderMathInBox(solBox);
+        }
 
             // Variables aleatorias reutilizables en los enunciados
             let k = getRnd(2, 9);
