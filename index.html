@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EngineersHub - Cálculo II</title>
-    <!-- Tailwind CSS para diseño moderno -->
+    <title>EngineersHub - MAT1620 Cálculo II (PUC)</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- KaTeX para renderizar LaTeX perfecto -->
+    <!-- KaTeX para renderizar fórmulas en LaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-    <!-- Lucide Icons -->
+    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight tracking-wide">ENGINEERS<span class="text-blue-500">HUB</span></h1>
-                    <p class="text-xs text-slate-400">Plataforma Académica de Ingeniería</p>
+                    <p class="text-xs text-slate-400">MAT1620 - Cálculo II (UC)</p>
                 </div>
             </div>
             <nav class="flex items-center gap-2">
@@ -39,15 +39,23 @@
     <!-- Main Layout -->
     <div class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        <!-- Sidebar Navigation: Clases y Temas -->
+        <!-- Sidebar Navigation: Clases del Programa -->
         <aside class="lg:col-span-1 space-y-6">
             <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <i data-lucide="list-tree" class="w-4 h-4"></i> Temario Clase a Clase
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i data-lucide="list-tree" class="w-4 h-4"></i> Programa Oficial (40 Clases)
                 </h2>
-                <nav id="topics-list" class="space-y-1">
+                <!-- Filtro de Capítulo -->
+                <select id="chapter-select" onchange="filterChapter()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 mb-3 focus:outline-none focus:border-blue-500">
+                    <option value="all">Todos los Capítulos</option>
+                    <option value="1">Capítulo 1: Integrales Impropias y Series</option>
+                    <option value="2">Capítulo 2: Funciones Varias Variables</option>
+                    <option value="3">Capítulo 3: Integrales Múltiples</option>
+                </select>
+
+                <div id="topics-list" class="space-y-1 max-h-[450px] overflow-y-auto pr-1">
                     <!-- Inyectado por JS -->
-                </nav>
+                </div>
             </div>
 
             <!-- Filtro de Dificultad -->
@@ -75,9 +83,12 @@
             <!-- Banner del Tema Actual -->
             <div class="bg-gradient-to-r from-blue-900/40 via-slate-800/50 to-slate-800/50 border border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <span id="current-class-tag" class="text-xs font-mono bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
-                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Indefinidas y Cambio de Variable</h2>
-                    <p id="current-topic-desc" class="text-sm text-slate-400 mt-1">Práctica de métodos de integración básicos y técnicas de sustitución u.</p>
+                    <div class="flex items-center gap-2">
+                        <span id="current-class-tag" class="text-xs font-mono bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
+                        <span id="current-chapter-tag" class="text-xs font-mono bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded-md border border-purple-500/30">Capítulo 1</span>
+                    </div>
+                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Impropias de Tipo I</h2>
+                    <p id="current-topic-desc" class="text-sm text-slate-400 mt-1">Análisis de convergencia en intervalos infinitos.</p>
                 </div>
                 <button onclick="generateNewExercise()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i>
@@ -90,7 +101,7 @@
                 
                 <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
                     <span class="text-xs font-mono text-slate-400 flex items-center gap-2">
-                        <i data-lucide="code" class="w-4 h-4 text-blue-400"></i> Ejercicio Generado Dinámicamente
+                        <i data-lucide="code" class="w-4 h-4 text-blue-400"></i> Ejercicio MAT1620
                     </span>
                     <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         Dificultad: Fácil
@@ -99,7 +110,7 @@
 
                 <!-- Enunciado LaTeX -->
                 <div class="space-y-3">
-                    <p class="text-slate-300 font-medium">Resuelve la siguiente integral e indica el resultado final:</p>
+                    <p class="text-slate-300 font-medium">Resuelve el siguiente problema correspondiente al programa de la clase:</p>
                     <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto" id="math-problem">
                         <!-- Renderizado de Math -->
                     </div>
@@ -107,9 +118,9 @@
 
                 <!-- Input de Respuesta -->
                 <div class="space-y-3 pt-2">
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Respuesta (expresión matemática o resultado):</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Respuesta o Valor de Límite/Resultado:</label>
                     <div class="flex flex-col md:flex-row gap-3">
-                        <input type="text" id="user-answer" placeholder="Ej: (x^3)/3 + C" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono text-sm">
+                        <input type="text" id="user-answer" placeholder="Ej: Converge a 1/2, Diverge, f_x = 2x..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono text-sm">
                         <button onclick="checkAnswer()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4"></i> Comprobar
                         </button>
@@ -138,34 +149,84 @@
 
     <!-- Script de la Aplicación -->
     <script>
-        // Data del temario Clase a Clase de Cálculo II
+        // Temario MAT1620 - UC (40 Clases agrupadas en 3 Capítulos)
         const topics = [
-            { id: 't1', classNum: 'Clase 01', title: 'Integrales Indefinidas y Sustitución', desc: 'Método de cambio de variable u.' },
-            { id: 't2', classNum: 'Clase 02', title: 'Integración por Partes', desc: 'Fórmula de integración por partes: ∫u dv = uv - ∫v du.' },
-            { id: 't3', classNum: 'Clase 03', title: 'Integrales Trigonométricas y Sustitución', desc: 'Potencias trigonométricas y sustitución trigonométrica.' },
-            { id: 't4', classNum: 'Clase 04', title: 'Fracciones Parciales', desc: 'Descomposición de funciones racionales.' },
-            { id: 't5', classNum: 'Clase 05', title: 'Integrales Impropias', desc: 'Límites infinitos y discontinuidades.' },
-            { id: 't6', classNum: 'Clase 06', title: 'Aplicaciones: Áreas y Volúmenes', desc: 'Área entre curvas y sólidos de revolución.' }
+            // Capítulo 1
+            { id: 'c1', chap: 1, classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
+            { id: 'c2', chap: 1, classNum: 'Clase 02', title: 'Integrales Impropias Tipo II', desc: 'Integrandos discontinuos y asíntotas verticales.' },
+            { id: 'c3', chap: 1, classNum: 'Clase 03', title: 'Criterios de Comparación', desc: 'Comparación directa y comparación en el límite.' },
+            { id: 'c4', chap: 1, classNum: 'Clase 04', title: 'Sucesiones y Límites', desc: 'Sucesiones numéricas y cálculo de sus límites.' },
+            { id: 'c5', chap: 1, classNum: 'Clase 05', title: 'Sucesiones Monótonas y Acotadas', desc: 'Criterios de convergencia para sucesiones.' },
+            { id: 'c6', chap: 1, classNum: 'Clase 06', title: 'Series y Sumas Parciales', desc: 'Definición de convergencia de series.' },
+            { id: 'c7', chap: 1, classNum: 'Clase 07', title: 'Criterio de la Integral', desc: 'Prueba de la integral para series numéricas.' },
+            { id: 'c8', chap: 1, classNum: 'Clase 08', title: 'Criterios de Comparación en Series', desc: 'Comparación directa y límite para series.' },
+            { id: 'c9', chap: 1, classNum: 'Clase 09', title: 'Series Alternantes', desc: 'Criterio de Leibniz y estimación de errores.' },
+            { id: 'c10', chap: 1, classNum: 'Clase 10', title: 'Criterios de la Raíz y Razón', desc: 'Convergencia absoluta y cociente.' },
+            { id: 'c11', chap: 1, classNum: 'Clase 11', title: 'Series de Potencias', desc: 'Radio e intervalo de convergencia.' },
+            { id: 'c12', chap: 1, classNum: 'Clase 12', title: 'Representación de Funciones', desc: 'Derivación e integración de series de potencias.' },
+            { id: 'c13', chap: 1, classNum: 'Clase 13', title: 'Series de Taylor y Maclaurin', desc: 'Desarrollo en serie de funciones clásicas.' },
+            
+            // Capítulo 2
+            { id: 'c14', chap: 2, classNum: 'Clase 14', title: 'Espacio R3 y Vectores', desc: 'Sistemas coordenados y operaciones vectoriales.' },
+            { id: 'c15', chap: 2, classNum: 'Clase 15', title: 'Producto Punto y Cruz', desc: 'Producto escalar, vectorial y producto triple.' },
+            { id: 'c16', chap: 2, classNum: 'Clase 16', title: 'Rectas y Planos en R3', desc: 'Ecuaciones de rectas, planos y distancias.' },
+            { id: 'c17', chap: 2, classNum: 'Clase 17', title: 'Funciones de Varias Variables', desc: 'Dominio y rango en dos o más variables.' },
+            { id: 'c18', chap: 2, classNum: 'Clase 18', title: 'Gráficas y Superficies Cuadráticas', desc: 'Curvas de nivel y cuadráticas.' },
+            { id: 'c19', chap: 2, classNum: 'Clase 19', title: 'Límites Multivariables', desc: 'Cálculo de límites y coordenadas polares.' },
+            { id: 'c20', chap: 2, classNum: 'Clase 20', title: 'Continuidad', desc: 'Continuidad en funciones de R^n a R.' },
+            { id: 'c21', chap: 2, classNum: 'Clase 21', title: 'Derivadas Parciales', desc: 'Interpretación geométrica y cálculo básico.' },
+            { id: 'c22', chap: 2, classNum: 'Clase 22', title: 'Derivadas de Orden Superior', desc: 'Teorema de Clairaut y derivadas cruzadas.' },
+            { id: 'c23', chap: 2, classNum: 'Clase 23', title: 'Plano Tangente y Diferenciabilidad', desc: 'Aproximación lineal y planos tangentes.' },
+            { id: 'c24', chap: 2, classNum: 'Clase 24', title: 'Regla de la Cadena', desc: 'Derivación de funciones compuestas multivariables.' },
+            { id: 'c25', chap: 2, classNum: 'Clase 25', title: 'Derivación Implícita', desc: 'Aplicación de regla de la cadena implícita.' },
+            { id: 'c26', chap: 2, classNum: 'Clase 26', title: 'Derivada Direccional y Gradiente', desc: 'Vector gradiente y dirección de máximo crecimiento.' },
+            { id: 'c27', chap: 2, classNum: 'Clase 27', title: 'Máximos, Mínimos y Puntos Silla', desc: 'Puntos críticos y matriz Hessiana.' },
+            { id: 'c28', chap: 2, classNum: 'Clase 28', title: 'Criterio de la Segunda Derivada', desc: 'Clasificación de puntos críticos.' },
+            { id: 'c29', chap: 2, classNum: 'Clase 29', title: 'Extremos Absolutos', desc: 'Optimización en regiones cerradas y acotadas.' },
+            { id: 'c30', chap: 3, classNum: 'Clase 30', title: 'Multiplicadores de Lagrange', desc: 'Optimización con una restricción.' },
+            { id: 'c31', chap: 2, classNum: 'Clase 31', title: 'Lagrange con Varias Restricciones', desc: 'Problemas avanzados de optimización con restricciones.' },
+
+            // Capítulo 3
+            { id: 'c32', chap: 3, classNum: 'Clase 32', title: 'Integrales Dobles sobre Rectángulos', desc: 'Integrales iteradas y Teorema de Fubini.' },
+            { id: 'c33', chap: 3, classNum: 'Clase 33', title: 'Integrales Dobles en Regiones Generales', desc: 'Regiones Tipo I y Tipo II.' },
+            { id: 'c34', chap: 3, classNum: 'Clase 34', title: 'Propiedades y Volúmenes', desc: 'Cálculo de volúmenes con integrales dobles.' },
+            { id: 'c35', chap: 3, classNum: 'Clase 35', title: 'Coordenadas Polares en Integrales', desc: 'Cambio de variables a coordenadas polares.' },
+            { id: 'c36', chap: 3, classNum: 'Clase 36', title: 'Integrales Triples', desc: 'Integración en regiones tridimensionales.' },
+            { id: 'c37', chap: 3, classNum: 'Clase 37', title: 'Cálculo de Volúmenes Triples', desc: 'Regiones del Tipo 1, 2 y 3 en R3.' },
+            { id: 'c38', chap: 3, classNum: 'Clase 38', title: 'Coordenadas Cilíndricas', desc: 'Integrales triples usando coordenadas cilíndricas.' },
+            { id: 'c39', chap: 3, classNum: 'Clase 39', title: 'Coordenadas Esféricas', desc: 'Integrales triples usando coordenadas esféricas.' },
+            { id: 'c40', chap: 3, classNum: 'Clase 40', title: 'Transformaciones y Jacobiano', desc: 'Cambio general de variables en integrales múltiples.' }
         ];
 
         let currentTopic = topics[0];
         let currentDifficulty = 'easy';
         let currentExercise = null;
 
-        // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
             renderTopicsSidebar();
             generateNewExercise();
             lucide.createIcons();
         });
 
-        // Renderizar lista de temas
+        function filterChapter() {
+            renderTopicsSidebar();
+        }
+
         function renderTopicsSidebar() {
+            const chapFilter = document.getElementById('chapter-select').value;
             const list = document.getElementById('topics-list');
-            list.innerHTML = topics.map(topic => `
-                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-3 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-400' : 'border-transparent hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'} flex flex-col gap-1">
-                    <span class="text-[10px] font-mono text-blue-400/80 font-bold">${topic.classNum}</span>
-                    <span class="text-xs font-semibold">${topic.title}</span>
+            
+            const filtered = chapFilter === 'all' 
+                ? topics 
+                : topics.filter(t => t.chap === parseInt(chapFilter));
+
+            list.innerHTML = filtered.map(topic => `
+                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-2.5 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-400' : 'border-transparent hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'} flex flex-col gap-0.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-blue-400/80 font-bold">${topic.classNum}</span>
+                        <span class="text-[9px] font-mono text-purple-400/80">Cap. ${topic.chap}</span>
+                    </div>
+                    <span class="text-xs font-semibold truncate">${topic.title}</span>
                 </button>
             `).join('');
         }
@@ -173,6 +234,7 @@
         function selectTopic(topicId) {
             currentTopic = topics.find(t => t.id === topicId);
             document.getElementById('current-class-tag').innerText = currentTopic.classNum;
+            document.getElementById('current-chapter-tag').innerText = `Capítulo ${currentTopic.chap}`;
             document.getElementById('current-topic-title').innerText = currentTopic.title;
             document.getElementById('current-topic-desc').innerText = currentTopic.desc;
             renderTopicsSidebar();
@@ -197,66 +259,81 @@
             generateNewExercise();
         }
 
-        // Generador dinámico de ejercicios matemáticos según tema y dificultad
+        // Generador dinámico adaptado a las 40 clases
         function generateNewExercise() {
             document.getElementById('feedback-box').classList.add('hidden');
             document.getElementById('solution-box').classList.add('hidden');
             document.getElementById('user-answer').value = '';
 
-            const a = Math.floor(Math.random() * 8) + 2; // Constante aleatoria 2-9
-            const n = Math.floor(Math.random() * 4) + 2; // Exponente aleatorio 2-5
+            const k = Math.floor(Math.random() * 6) + 2; // Constante aleatoria 2-7
+            const p = Math.floor(Math.random() * 3) + 2; // Exponente
 
-            if (currentTopic.id === 't1') {
-                // Tema 1: Integrales Indefinidas y Sustitución
-                if (currentDifficulty === 'easy') {
+            // Ejemplos generados dinámicamente según la clase seleccionada
+            if (currentTopic.chap === 1) {
+                if (currentTopic.id === 'c1') {
+                    // Integrales Impropias Tipo I
+                    if (currentDifficulty === 'easy') {
+                        currentExercise = {
+                            latex: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
+                            solution: `1. Reescribe con límite: $\\lim_{b \\to \\infty} \\int_{1}^{b} ${k}x^{-${p}} dx$.\n2. Evalúa la antiderivada: $\\lim_{b \\to \\infty} \\left[ \\frac{${k}x^{1-${p}}}{1-${p}} \\right]_{1}^{b}$.\n3. Como $p = ${p} > 1$, la integral **CONVERGE** a $\\frac{${k}}{${p-1}}$.`
+                        };
+                    } else {
+                        currentExercise = {
+                            latex: `\\int_{0}^{\\infty} x e^{-${k}x} \\, dx`,
+                            solution: `1. Aplica integración por partes con $u = x, dv = e^{-${k}x}dx$.\n2. Obtenemos $\\lim_{b \\to \\infty} \\left[ -\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k}^2}e^{-${k}x} \\right]_0^b$.\n3. La integral **CONVERGE** a $\\frac{1}{${k*k}}$.`
+                        };
+                    }
+                } else if (currentTopic.id === 'c13') {
+                    // Taylor / Maclaurin
                     currentExercise = {
-                        latex: `\\int ${a}x^{${n}} \\, dx`,
-                        rawAns: `${a}/${n+1}*x^${n+1}`,
-                        solution: `1. Aplica la regla de la potencia: $\\int x^n dx = \\frac{x^{n+1}}{n+1}$\n2. Multiplica por la constante $${a}$: $\\frac{${a}}{${n+1}}x^{${n+1}} + C$`
-                    };
-                } else if (currentDifficulty === 'medium') {
-                    currentExercise = {
-                        latex: `\\int (x^2 + ${a})^{${n}} (2x) \\, dx`,
-                        rawAns: `(x^2+${a})^${n+1}/${n+1}`,
-                        solution: `1. Haz la sustitución $u = x^2 + ${a}$, por lo que $du = 2x dx$.\n2. La integral se transforma en $\\int u^{${n}} du$.\n3. Integra: $\\frac{u^{${n+1}}}{${n+1}} + C = \\frac{(x^2 + ${a})^{${n+1}}}{${n+1}} + C$`
+                        latex: `f(x) = e^{${k}x} \\quad \\text{alrededor de } x = 0`,
+                        solution: `1. Derivadas sucesivas: $f^{(n)}(0) = ${k}^n$.\n2. Fórmula de Maclaurin: $\\sum_{n=0}^{\\infty} \\frac{f^{(n)}(0)}{n!} x^n$.\n3. Serie: $\\sum_{n=0}^{\\infty} \\frac{(${k}x)^n}{n!} = 1 + ${k}x + \\frac{${k*k}x^2}{2} + \\dots$`
                     };
                 } else {
                     currentExercise = {
-                        latex: `\\int \\frac{${a}x}{\\sqrt{x^2 + ${a*2}}} \\, dx`,
-                        rawAns: `${a}*sqrt(x^2+${a*2})`,
-                        solution: `1. Usa $u = x^2 + ${a*2}$, entonces $du = 2x dx \\Rightarrow x dx = \\frac{du}{2}$.\n2. Reemplaza: $\\frac{${a}}{2} \\int u^{-1/2} du = ${a} u^{1/2} + C$.\n3. Resultado: $${a}\\sqrt{x^2 + ${a*2}} + C$`
+                        latex: `\\sum_{n=1}^{\\infty} \\frac{${k}}{n^{${p}}}`,
+                        solution: `1. Analiza usando el Criterio de la Serie $p$.\n2. En este caso $p = ${p} > 1$.\n3. Por lo tanto, la serie **CONVERGE**.`
                     };
                 }
-            } else if (currentTopic.id === 't2') {
-                // Tema 2: Por Partes
-                if (currentDifficulty === 'easy') {
+            } else if (currentTopic.chap === 2) {
+                if (currentTopic.id === 'c21') {
+                    // Derivadas Parciales
                     currentExercise = {
-                        latex: `\\int x e^{${a}x} \\, dx`,
-                        rawAns: `x*e^(${a}x)/${a} - e^(${a}x)/${a^2}`,
-                        solution: `1. Usa $u = x \\Rightarrow du = dx$ y $dv = e^{${a}x}dx \\Rightarrow v = \\frac{1}{${a}}e^{${a}x}$.\n2. Aplica $\\int u dv = uv - \\int v du$.\n3. Resultado: $\\frac{x e^{${a}x}}{${a}} - \\frac{e^{${a}x}}{${a^2}} + C$`
+                        latex: `f(x, y) = ${k}x^2 y^3 + \\sin(${p}x)`,
+                        solution: `1. Para $f_x$: Trata a $y$ como constante $\\Rightarrow f_x = ${k*2}x y^3 + ${p}\\cos(${p}x)$.\n2. Para $f_y$: Trata a $x$ como constante $\\Rightarrow f_y = ${k*3}x^2 y^2$.`
+                    };
+                } else if (currentTopic.id === 'c26') {
+                    // Gradiente
+                    currentExercise = {
+                        latex: `f(x,y) = x^2 + ${k}y^2 \\quad \\text{en el punto } P(1, 2)`,
+                        solution: `1. Calcula el gradiente $\\nabla f = (f_x, f_y) = (2x, ${k*2}y)$.\n2. Evalúa en $P(1,2)$: $\\nabla f(1,2) = (2(1), ${k*2}(2)) = (2, ${k*4})$.`
                     };
                 } else {
                     currentExercise = {
-                        latex: `\\int x^{${n}} \\ln(x) \\, dx`,
-                        rawAns: `(x^${n+1}*ln(x))/${n+1} - x^${n+1}/${(n+1)*(n+1)}`,
-                        solution: `1. Selecciona $u = \\ln(x) \\Rightarrow du = \\frac{1}{x}dx$ y $dv = x^{${n}}dx \\Rightarrow v = \\frac{x^{${n+1}}}{${n+1}}$.\n2. Aplica la fórmula e integra el segundo término.`
+                        latex: `f(x, y) = ${k}x^2 - y^2`,
+                        solution: `1. Calcula derivadas de primer orden: $f_x = ${2*k}x = 0$, $f_y = -2y = 0 \\Rightarrow$ Punto crítico $(0,0)$.\n2. Hessiano: $D = f_{xx}f_{yy} - (f_{xy})^2 = (${2*k})(-2) - 0 = -${4*k} < 0$.\n3. Como $D < 0$, en $(0,0)$ hay un **PUNTO SILLA**.`
                     };
                 }
             } else {
-                // Fallback / Otros Temas
-                currentExercise = {
-                    latex: `\\int \\sin(${a}x) \\, dx`,
-                    rawAns: `-cos(${a}x)/${a}`,
-                    solution: `1. Usa el cambio directo de variable $u = ${a}x$.\n2. Resultado: $-\\frac{\\cos(${a}x)}{${a}} + C$`
-                };
+                // Capítulo 3: Integrales Múltiples
+                if (currentTopic.id === 'c32' || currentTopic.id === 'c33') {
+                    currentExercise = {
+                        latex: `\\int_{0}^{${k}} \\int_{0}^{1} (${p}x + y) \\, dy \\, dx`,
+                        solution: `1. Integra con respecto a $y$: $\\left[ ${p}xy + \\frac{y^2}{2} \\right]_{0}^{1} = ${p}x + \\frac{1}{2}$.\n2. Integra con respecto a $x$: $\\int_{0}^{${k}} (${p}x + \\frac{1}{2}) dx = \\left[ \\frac{${p}x^2}{2} + \\frac{x}{2} \\right]_0^{${k}}$.\n3. Resultado final: $\\frac{${p*k*k} + ${k}}{2}$.`
+                    };
+                } else {
+                    currentExercise = {
+                        latex: `\\iint_R (x^2 + y^2) \\, dA \\quad \\text{en polares para } r \\in [0, ${k}], \\theta \\in [0, 2\\pi]`,
+                        solution: `1. Cambia el integrando a polares: $x^2 + y^2 = r^2$ y $dA = r \\, dr \\, d\\theta$.\n2. Integral: $\\int_{0}^{2\\pi} \\int_{0}^{${k}} r^3 \\, dr \\, d\\theta$.\n3. Resultado: $2\\pi \\left[ \\frac{r^4}{4} \\right]_0^{${k}} = \\frac{\\pi ${k**4}}{2}$.`
+                    };
+                }
             }
 
-            // Renderizar la integral en pantalla con KaTeX
+            // Renderizar LaTeX
             const problemDiv = document.getElementById('math-problem');
             problemDiv.innerHTML = `\\[ ${currentExercise.latex} \\]`;
             renderMathInElement(problemDiv);
 
-            // Renderizar la solución paso a paso
             const solDiv = document.getElementById('solution-box');
             solDiv.innerHTML = currentExercise.solution.replace(/\n/g, '<br>');
             renderMathInElement(solDiv);
@@ -268,14 +345,13 @@
 
             if (!userVal) {
                 feedbackBox.className = "p-4 rounded-lg text-sm bg-amber-500/10 border border-amber-500/20 text-amber-400";
-                feedbackBox.innerText = "Por favor, escribe una respuesta antes de comprobar.";
+                feedbackBox.innerText = "Escribe tu desarrollo o resultado final antes de verificar.";
                 feedbackBox.classList.remove('hidden');
                 return;
             }
 
-            // Verificación simple (Se puede mejorar comparando estructuras)
             feedbackBox.className = "p-4 rounded-lg text-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-400";
-            feedbackBox.innerHTML = `<strong>¡Ejercicio enviado correctamente!</strong><br>Compara la estructura de tu respuesta con la solución detallada abajo.`;
+            feedbackBox.innerHTML = `<strong>¡Respuesta registrada!</strong><br>Despliega el paso a paso para comparar con la pauta oficial del ejercicio.`;
             feedbackBox.classList.remove('hidden');
         }
 
