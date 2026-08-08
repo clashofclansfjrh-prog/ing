@@ -6,11 +6,11 @@
     <title>EngineersHub - MAT1620 Cálculo II (PUC)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- KaTeX para renderizar fórmulas en LaTeX -->
+    <!-- KaTeX CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-    <!-- Icons -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
@@ -27,25 +27,21 @@
                     <p class="text-xs text-slate-400">MAT1620 - Cálculo II (UC)</p>
                 </div>
             </div>
-            <nav class="flex items-center gap-2">
-                <button class="px-4 py-2 text-sm font-medium bg-blue-600/10 text-blue-400 border border-blue-500/20 rounded-lg flex items-center gap-2">
-                    <i data-lucide="book-open" class="w-4 h-4"></i>
-                    Cálculo II
-                </button>
-            </nav>
+            <span class="px-3 py-1 text-xs font-mono bg-blue-600/10 text-blue-400 border border-blue-500/20 rounded-lg">
+                40 Clases Oficiales
+            </span>
         </div>
     </header>
 
     <!-- Main Layout -->
     <div class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        <!-- Sidebar Navigation: Clases del Programa -->
+        <!-- Sidebar Navigation -->
         <aside class="lg:col-span-1 space-y-6">
             <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
                 <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i data-lucide="list-tree" class="w-4 h-4"></i> Programa Oficial (40 Clases)
+                    <i data-lucide="list-tree" class="w-4 h-4"></i> Programa de Clases
                 </h2>
-                <!-- Filtro de Capítulo -->
                 <select id="chapter-select" onchange="filterChapter()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 mb-3 focus:outline-none focus:border-blue-500">
                     <option value="all">Todos los Capítulos</option>
                     <option value="1">Capítulo 1: Integrales Impropias y Series</option>
@@ -53,7 +49,7 @@
                     <option value="3">Capítulo 3: Integrales Múltiples</option>
                 </select>
 
-                <div id="topics-list" class="space-y-1 max-h-[450px] overflow-y-auto pr-1">
+                <div id="topics-list" class="space-y-1 max-h-[420px] overflow-y-auto pr-1">
                     <!-- Inyectado por JS -->
                 </div>
             </div>
@@ -87,12 +83,12 @@
                         <span id="current-class-tag" class="text-xs font-mono bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
                         <span id="current-chapter-tag" class="text-xs font-mono bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded-md border border-purple-500/30">Capítulo 1</span>
                     </div>
-                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Impropias de Tipo I</h2>
+                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Impropias Tipo I</h2>
                     <p id="current-topic-desc" class="text-sm text-slate-400 mt-1">Análisis de convergencia en intervalos infinitos.</p>
                 </div>
                 <button onclick="generateNewExercise()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                    Nuevo Ejercicio
+                    Generar Otro Ejercicio
                 </button>
             </div>
 
@@ -101,7 +97,7 @@
                 
                 <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
                     <span class="text-xs font-mono text-slate-400 flex items-center gap-2">
-                        <i data-lucide="code" class="w-4 h-4 text-blue-400"></i> Ejercicio MAT1620
+                        <i data-lucide="calculator" class="w-4 h-4 text-blue-400"></i> Problema
                     </span>
                     <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         Dificultad: Fácil
@@ -110,34 +106,26 @@
 
                 <!-- Enunciado LaTeX -->
                 <div class="space-y-3">
-                    <p class="text-slate-300 font-medium">Resuelve el siguiente problema correspondiente al programa de la clase:</p>
-                    <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto" id="math-problem">
-                        <!-- Renderizado de Math -->
+                    <p class="text-slate-300 font-medium">Analiza y resuelve el siguiente ejercicio:</p>
+                    <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto min-h-[100px] flex items-center justify-center" id="math-problem">
+                        <!-- Math -->
                     </div>
                 </div>
 
-                <!-- Input de Respuesta -->
-                <div class="space-y-3 pt-2">
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Respuesta o Valor de Límite/Resultado:</label>
-                    <div class="flex flex-col md:flex-row gap-3">
-                        <input type="text" id="user-answer" placeholder="Ej: Converge a 1/2, Diverge, f_x = 2x..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono text-sm">
-                        <button onclick="checkAnswer()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i> Comprobar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Feedback -->
-                <div id="feedback-box" class="hidden p-4 rounded-lg text-sm border"></div>
-
-                <!-- Solución Paso a Paso (Acordeón) -->
-                <div class="border-t border-slate-700/50 pt-4">
-                    <button onclick="toggleSolution()" class="text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
-                        <i data-lucide="help-circle" class="w-4 h-4 text-blue-400"></i>
-                        <span>Ver Solución Paso a Paso</span>
-                        <i data-lucide="chevron-down" id="chevron-sol" class="w-4 h-4 transition-transform"></i>
+                <!-- Botón de Revelar Solución -->
+                <div class="pt-2 flex justify-center">
+                    <button onclick="toggleSolution()" class="w-full md:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-400 font-semibold text-sm rounded-lg flex items-center justify-center gap-2 transition">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        <span id="sol-btn-text">Ver Solución Paso a Paso</span>
                     </button>
-                    <div id="solution-box" class="hidden mt-4 p-5 bg-slate-900/60 border border-slate-800 rounded-lg text-sm space-y-3 font-mono text-slate-300">
+                </div>
+
+                <!-- Solución Paso a Paso -->
+                <div id="solution-container" class="hidden bg-slate-900/90 border border-blue-500/30 rounded-xl p-6 space-y-4">
+                    <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución Detallada
+                    </h3>
+                    <div id="solution-box" class="space-y-3 text-slate-200 text-sm leading-relaxed">
                         <!-- Solución inyectada por JS -->
                     </div>
                 </div>
@@ -149,7 +137,6 @@
 
     <!-- Script de la Aplicación -->
     <script>
-        // Temario MAT1620 - UC (40 Clases agrupadas en 3 Capítulos)
         const topics = [
             // Capítulo 1
             { id: 'c1', chap: 1, classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
@@ -200,7 +187,6 @@
 
         let currentTopic = topics[0];
         let currentDifficulty = 'easy';
-        let currentExercise = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             renderTopicsSidebar();
@@ -259,107 +245,115 @@
             generateNewExercise();
         }
 
-        // Generador dinámico adaptado a las 40 clases
+        // Generador de Ejercicios Variados por Plantillas
         function generateNewExercise() {
-            document.getElementById('feedback-box').classList.add('hidden');
-            document.getElementById('solution-box').classList.add('hidden');
-            document.getElementById('user-answer').value = '';
+            // Ocultar solución previa
+            document.getElementById('solution-container').classList.add('hidden');
+            document.getElementById('sol-btn-text').innerText = "Ver Solución Paso a Paso";
 
-            const k = Math.floor(Math.random() * 6) + 2; // Constante aleatoria 2-7
-            const p = Math.floor(Math.random() * 3) + 2; // Exponente
+            const a = Math.floor(Math.random() * 5) + 2;
+            const b = Math.floor(Math.random() * 4) + 1;
+            const templates = [];
 
-            // Ejemplos generados dinámicamente según la clase seleccionada
-            if (currentTopic.chap === 1) {
-                if (currentTopic.id === 'c1') {
-                    // Integrales Impropias Tipo I
-                    if (currentDifficulty === 'easy') {
-                        currentExercise = {
-                            latex: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
-                            solution: `1. Reescribe con límite: $\\lim_{b \\to \\infty} \\int_{1}^{b} ${k}x^{-${p}} dx$.\n2. Evalúa la antiderivada: $\\lim_{b \\to \\infty} \\left[ \\frac{${k}x^{1-${p}}}{1-${p}} \\right]_{1}^{b}$.\n3. Como $p = ${p} > 1$, la integral **CONVERGE** a $\\frac{${k}}{${p-1}}$.`
-                        };
-                    } else {
-                        currentExercise = {
-                            latex: `\\int_{0}^{\\infty} x e^{-${k}x} \\, dx`,
-                            solution: `1. Aplica integración por partes con $u = x, dv = e^{-${k}x}dx$.\n2. Obtenemos $\\lim_{b \\to \\infty} \\left[ -\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k}^2}e^{-${k}x} \\right]_0^b$.\n3. La integral **CONVERGE** a $\\frac{1}{${k*k}}$.`
-                        };
-                    }
-                } else if (currentTopic.id === 'c13') {
-                    // Taylor / Maclaurin
-                    currentExercise = {
-                        latex: `f(x) = e^{${k}x} \\quad \\text{alrededor de } x = 0`,
-                        solution: `1. Derivadas sucesivas: $f^{(n)}(0) = ${k}^n$.\n2. Fórmula de Maclaurin: $\\sum_{n=0}^{\\infty} \\frac{f^{(n)}(0)}{n!} x^n$.\n3. Serie: $\\sum_{n=0}^{\\infty} \\frac{(${k}x)^n}{n!} = 1 + ${k}x + \\frac{${k*k}x^2}{2} + \\dots$`
-                    };
-                } else {
-                    currentExercise = {
-                        latex: `\\sum_{n=1}^{\\infty} \\frac{${k}}{n^{${p}}}`,
-                        solution: `1. Analiza usando el Criterio de la Serie $p$.\n2. En este caso $p = ${p} > 1$.\n3. Por lo tanto, la serie **CONVERGE**.`
-                    };
-                }
-            } else if (currentTopic.chap === 2) {
-                if (currentTopic.id === 'c21') {
-                    // Derivadas Parciales
-                    currentExercise = {
-                        latex: `f(x, y) = ${k}x^2 y^3 + \\sin(${p}x)`,
-                        solution: `1. Para $f_x$: Trata a $y$ como constante $\\Rightarrow f_x = ${k*2}x y^3 + ${p}\\cos(${p}x)$.\n2. Para $f_y$: Trata a $x$ como constante $\\Rightarrow f_y = ${k*3}x^2 y^2$.`
-                    };
-                } else if (currentTopic.id === 'c26') {
-                    // Gradiente
-                    currentExercise = {
-                        latex: `f(x,y) = x^2 + ${k}y^2 \\quad \\text{en el punto } P(1, 2)`,
-                        solution: `1. Calcula el gradiente $\\nabla f = (f_x, f_y) = (2x, ${k*2}y)$.\n2. Evalúa en $P(1,2)$: $\\nabla f(1,2) = (2(1), ${k*2}(2)) = (2, ${k*4})$.`
-                    };
-                } else {
-                    currentExercise = {
-                        latex: `f(x, y) = ${k}x^2 - y^2`,
-                        solution: `1. Calcula derivadas de primer orden: $f_x = ${2*k}x = 0$, $f_y = -2y = 0 \\Rightarrow$ Punto crítico $(0,0)$.\n2. Hessiano: $D = f_{xx}f_{yy} - (f_{xy})^2 = (${2*k})(-2) - 0 = -${4*k} < 0$.\n3. Como $D < 0$, en $(0,0)$ hay un **PUNTO SILLA**.`
-                    };
-                }
-            } else {
-                // Capítulo 3: Integrales Múltiples
-                if (currentTopic.id === 'c32' || currentTopic.id === 'c33') {
-                    currentExercise = {
-                        latex: `\\int_{0}^{${k}} \\int_{0}^{1} (${p}x + y) \\, dy \\, dx`,
-                        solution: `1. Integra con respecto a $y$: $\\left[ ${p}xy + \\frac{y^2}{2} \\right]_{0}^{1} = ${p}x + \\frac{1}{2}$.\n2. Integra con respecto a $x$: $\\int_{0}^{${k}} (${p}x + \\frac{1}{2}) dx = \\left[ \\frac{${p}x^2}{2} + \\frac{x}{2} \\right]_0^{${k}}$.\n3. Resultado final: $\\frac{${p*k*k} + ${k}}{2}$.`
-                    };
-                } else {
-                    currentExercise = {
-                        latex: `\\iint_R (x^2 + y^2) \\, dA \\quad \\text{en polares para } r \\in [0, ${k}], \\theta \\in [0, 2\\pi]`,
-                        solution: `1. Cambia el integrando a polares: $x^2 + y^2 = r^2$ y $dA = r \\, dr \\, d\\theta$.\n2. Integral: $\\int_{0}^{2\\pi} \\int_{0}^{${k}} r^3 \\, dr \\, d\\theta$.\n3. Resultado: $2\\pi \\left[ \\frac{r^4}{4} \\right]_0^{${k}} = \\frac{\\pi ${k**4}}{2}$.`
-                    };
-                }
+            // Generación con formas variadas por tema
+            if (currentTopic.id === 'c1') { // Integrales Impropias Tipo I
+                templates.push({
+                    problem: `\\int_{1}^{\\infty} \\frac{${a}}{x^{${b+1}}} \\, dx`,
+                    solution: [
+                        `Reescribir como límite: $$\\lim_{t \\to \\infty} \\int_{1}^{t} ${a}x^{-${b+1}} \\, dx$$`,
+                        `Calcular la antiderivada: $$\\int ${a}x^{-${b+1}} \\, dx = -\\frac{${a}}{${b}x^{${b}}}$$`,
+                        `Evaluar el límite: $$\\lim_{t \\to \\infty} \\left[ -\\frac{${a}}{${b}t^{${b}}} + \\frac{${a}}{${b}(1)^{${b}}} \\right] = 0 + \\frac{${a}}{${b}}$$`,
+                        `**Conclusión:** La integral **converge** a $\\frac{${a}}{${b}}$.`
+                    ]
+                });
+                templates.push({
+                    problem: `\\int_{0}^{\\infty} x e^{-${a}x} \\, dx`,
+                    solution: [
+                        `Aplicar integración por partes: $u = x \\Rightarrow du = dx$ y $dv = e^{-${a}x}dx \\Rightarrow v = -\\frac{1}{${a}}e^{-${a}x}$.`,
+                        `Formular la integral: $$\\int x e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\int -\\frac{1}{${a}}e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\frac{1}{${a*a}}e^{-${a}x}$$`,
+                        `Evaluar el límite de $0$ a $\\infty$: $$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${a}}e^{-${a}t} - \\frac{1}{${a*a}}e^{-${a}t} \\right) - \\left( 0 - \\frac{1}{${a*a}} \\right) = \\frac{1}{${a*a}}$$`,
+                        `**Conclusión:** La integral **converge** a $\\frac{1}{${a*a}}$.`
+                    ]
+                });
+                templates.push({
+                    problem: `\\int_{2}^{\\infty} \\frac{dx}{x \\ln(x)^{${b+1}}}`,
+                    solution: [
+                        `Sustitución $u = \\ln(x) \\Rightarrow du = \\frac{dx}{x}$. Límites: $x=2 \\Rightarrow u=\\ln(2)$, $x=\\infty \\Rightarrow u=\\infty$.`,
+                        `Integral transformada: $$\\int_{\\ln(2)}^{\\infty} u^{-${b+1}} \\, du = \\lim_{t \\to \\infty} \\left[ -\\frac{1}{${b}u^{${b}}} \\right]_{\\ln(2)}^{t}$$`,
+                        `Evaluar: $$\\lim_{t \\to \\infty} \\left( -\\frac{1}{${b}t^{${b}}} \\right) + \\frac{1}{${b}(\\ln 2)^{${b}}} = \\frac{1}{${b}(\\ln 2)^{${b}}}$$`,
+                        `**Conclusión:** La integral **converge**.`
+                    ]
+                });
+            } else if (currentTopic.id === 'c21') { // Derivadas Parciales
+                templates.push({
+                    problem: `f(x, y) = ${a}x^3 y^2 - \\cos(${b}x) + e^{y}`,
+                    solution: [
+                        `Derivada parcial respecto a $x$ ($y$ constante): $$f_x(x,y) = ${a*3}x^2 y^2 + ${b}\\sin(${b}x)$$`,
+                        `Derivada parcial respecto a $y$ ($x$ constante): $$f_y(x,y) = ${a*2}x^3 y + e^y$$`
+                    ]
+                });
+                templates.push({
+                    problem: `f(x, y) = \\ln(x^2 + ${a}y^2)`,
+                    solution: [
+                        `Aplica regla de la cadena para $x$: $$f_x(x,y) = \\frac{1}{x^2 + ${a}y^2} \\cdot 2x = \\frac{2x}{x^2 + ${a}y^2}$$`,
+                        `Aplica regla de la cadena para $y$: $$f_y(x,y) = \\frac{1}{x^2 + ${a}y^2} \\cdot ${a*2}y = \\frac{${a*2}y}{x^2 + ${a}y^2}$$`
+                    ]
+                });
+            } else { // Plantilla General con funciones variadas
+                templates.push({
+                    problem: `\\iint_R (${a}x + ${b}y^2) \\, dA \\quad \\text{donde } R = [0, 1] \\times [0, 2]`,
+                    solution: [
+                        `Plantear la integral iterada: $$\\int_{0}^{1} \\int_{0}^{2} (${a}x + ${b}y^2) \\, dy \\, dx$$`,
+                        `Integrar primero respecto a $y$: $$\\int_{0}^{2} (${a}x + ${b}y^2) dy = \\left[ ${a}xy + \\frac{${b}}{3}y^3 \\right]_0^2 = ${a*2}x + \\frac{${b*8}}{3}$$`,
+                        `Integrar respecto a $x$: $$\\int_{0}^{1} \\left( ${a*2}x + \\frac{${b*8}}{3} \\right) dx = \\left[ ${a}x^2 + \\frac{${b*8}}{3}x \\right]_0^1 = ${a} + \\frac{${b*8}}{3}$$`
+                    ]
+                });
+                templates.push({
+                    problem: `f(x, y) = x^2 + y^2 - ${a*2}x - ${b*2}y + 5`,
+                    solution: [
+                        `Calcular derivadas primeras: $$f_x = 2x - ${a*2} = 0 \\Rightarrow x = ${a}$$, $$f_y = 2y - ${b*2} = 0 \\Rightarrow y = ${b}$$`,
+                        `Punto crítico único en $(${a}, ${b})$.`,
+                        `Segundas derivadas: $f_{xx} = 2$, $f_{yy} = 2$, $f_{xy} = 0$.`,
+                        `Discriminante Hessiano: $$D = f_{xx}f_{yy} - (f_{xy})^2 = (2)(2) - 0 = 4 > 0$$`,
+                        `Como $D > 0$ y $f_{xx} > 0$, en $(${a}, ${b})$ hay un **Mínimo Local**.`
+                    ]
+                });
             }
 
-            // Renderizar LaTeX
+            // Seleccionar plantilla aleatoria
+            const selected = templates[Math.floor(Math.random() * templates.length)];
+
+            // Renderizar Enunciado
             const problemDiv = document.getElementById('math-problem');
-            problemDiv.innerHTML = `\\[ ${currentExercise.latex} \\]`;
-            renderMathInElement(problemDiv);
+            problemDiv.innerHTML = `\\[ ${selected.problem} \\]`;
 
-            const solDiv = document.getElementById('solution-box');
-            solDiv.innerHTML = currentExercise.solution.replace(/\n/g, '<br>');
-            renderMathInElement(solDiv);
-        }
+            // Renderizar Solución
+            const solBox = document.getElementById('solution-box');
+            solBox.innerHTML = selected.solution.map(step => `<p>${step}</p>`).join('');
 
-        function checkAnswer() {
-            const userVal = document.getElementById('user-answer').value.trim();
-            const feedbackBox = document.getElementById('feedback-box');
-
-            if (!userVal) {
-                feedbackBox.className = "p-4 rounded-lg text-sm bg-amber-500/10 border border-amber-500/20 text-amber-400";
-                feedbackBox.innerText = "Escribe tu desarrollo o resultado final antes de verificar.";
-                feedbackBox.classList.remove('hidden');
-                return;
+            // Renderizar LaTeX en ambos elementos
+            if (window.renderMathInElement) {
+                renderMathInElement(problemDiv);
+                renderMathInElement(solBox);
             }
-
-            feedbackBox.className = "p-4 rounded-lg text-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-400";
-            feedbackBox.innerHTML = `<strong>¡Respuesta registrada!</strong><br>Despliega el paso a paso para comparar con la pauta oficial del ejercicio.`;
-            feedbackBox.classList.remove('hidden');
         }
 
         function toggleSolution() {
+            const container = document.getElementById('solution-container');
+            const btnText = document.getElementById('sol-btn-text');
             const solBox = document.getElementById('solution-box');
-            const chevron = document.getElementById('chevron-sol');
-            solBox.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-180');
+
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                btnText.innerText = "Ocultar Solución";
+                // Re-renderizar LaTeX para asegurar visualización perfecta al abrir
+                if (window.renderMathInElement) {
+                    renderMathInElement(solBox);
+                }
+            } else {
+                container.classList.add('hidden');
+                btnText.innerText = "Ver Solución Paso a Paso";
+            }
         }
     </script>
 </body>
