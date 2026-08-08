@@ -1,35 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EngineersHub - MAT1620 Cálculo II (PUC)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <!-- KaTeX CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Marked JS (Para procesar Markdown a HTML) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
     <!-- Header / Navbar -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="bg-blue-600 p-2 rounded-lg">
                     <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-wide">ENGINEERS<span class="text-blue-500">HUB</span></h1>
-                    <p class="text-xs text-slate-400">MAT1620 - Cálculo II (UC)</p>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide text-slate-900 dark:text-white">ENGINEERS<span class="text-blue-500">HUB</span></h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">MAT1620 - Cálculo II (UC)</p>
                 </div>
             </div>
-            <span class="px-3 py-1 text-xs font-mono bg-blue-600/10 text-blue-400 border border-blue-500/20 rounded-lg">
-                40 Clases Oficiales
-            </span>
+            
+            <div class="flex items-center gap-3">
+                <!-- Toggle Modo Oscuro / Claro -->
+                <button onclick="toggleTheme()" class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="sun" id="theme-icon-sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" id="theme-icon-moon" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+                
+                <span class="hidden sm:inline-block px-3 py-1 text-xs font-mono bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-lg">
+                    40 Clases Oficiales
+                </span>
+            </div>
         </div>
     </header>
 
@@ -38,11 +54,11 @@
         
         <!-- Sidebar Navigation -->
         <aside class="lg:col-span-1 space-y-6">
-            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <div class="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
+                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <i data-lucide="list-tree" class="w-4 h-4"></i> Programa de Clases
                 </h2>
-                <select id="chapter-select" onchange="filterChapter()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 mb-3 focus:outline-none focus:border-blue-500">
+                <select id="chapter-select" onchange="filterChapter()" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs text-slate-800 dark:text-slate-200 mb-3 focus:outline-none focus:border-blue-500">
                     <option value="all">Todos los Capítulos</option>
                     <option value="1">Capítulo 1: Integrales Impropias y Series</option>
                     <option value="2">Capítulo 2: Funciones Varias Variables</option>
@@ -55,18 +71,18 @@
             </div>
 
             <!-- Filtro de Dificultad -->
-            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <div class="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
+                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <i data-lucide="sliders" class="w-4 h-4"></i> Nivel de Dificultad
                 </h2>
                 <div class="grid grid-cols-3 gap-2" id="difficulty-selector">
-                    <button onclick="setDifficulty('easy')" id="btn-easy" class="py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                    <button onclick="setDifficulty('easy')" id="btn-easy" class="py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                         Fácil
                     </button>
-                    <button onclick="setDifficulty('medium')" id="btn-medium" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white">
+                    <button onclick="setDifficulty('medium')" id="btn-medium" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                         Medio
                     </button>
-                    <button onclick="setDifficulty('hard')" id="btn-hard" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white">
+                    <button onclick="setDifficulty('hard')" id="btn-hard" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                         Avanzado
                     </button>
                 </div>
@@ -77,14 +93,14 @@
         <main class="lg:col-span-3 space-y-6">
             
             <!-- Banner del Tema Actual -->
-            <div class="bg-gradient-to-r from-blue-900/40 via-slate-800/50 to-slate-800/50 border border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="bg-gradient-to-r from-blue-500/10 via-white to-white dark:from-blue-900/40 dark:via-slate-800/50 dark:to-slate-800/50 border border-blue-200 dark:border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-none">
                 <div>
                     <div class="flex items-center gap-2">
-                        <span id="current-class-tag" class="text-xs font-mono bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
-                        <span id="current-chapter-tag" class="text-xs font-mono bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded-md border border-purple-500/30">Capítulo 1</span>
+                        <span id="current-class-tag" class="text-xs font-mono bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
+                        <span id="current-chapter-tag" class="text-xs font-mono bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-300 px-2.5 py-1 rounded-md border border-purple-500/30">Capítulo 1</span>
                     </div>
-                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Impropias Tipo I</h2>
-                    <p id="current-topic-desc" class="text-sm text-slate-400 mt-1">Análisis de convergencia en intervalos infinitos.</p>
+                    <h2 id="current-topic-title" class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Integrales Impropias Tipo I</h2>
+                    <p id="current-topic-desc" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Análisis de convergencia en intervalos infinitos.</p>
                 </div>
                 <button onclick="generateNewExercise()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i>
@@ -93,39 +109,39 @@
             </div>
 
             <!-- Card del Ejercicio -->
-            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-6 md:p-8 space-y-6">
+            <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 rounded-xl p-6 md:p-8 space-y-6 shadow-sm dark:shadow-none">
                 
-                <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
-                    <span class="text-xs font-mono text-slate-400 flex items-center gap-2">
-                        <i data-lucide="calculator" class="w-4 h-4 text-blue-400"></i> Problema
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/50 pb-4">
+                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4 text-blue-500"></i> Problema
                     </span>
-                    <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                         Dificultad: Fácil
                     </span>
                 </div>
 
-                <!-- Enunciado LaTeX -->
+                <!-- Enunciado -->
                 <div class="space-y-3">
-                    <p class="text-slate-300 font-medium">Analiza y resuelve el siguiente ejercicio:</p>
-                    <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto min-h-[100px] flex items-center justify-center" id="math-problem">
+                    <p class="text-slate-700 dark:text-slate-300 font-medium">Analiza y resuelve el siguiente ejercicio:</p>
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto min-h-[100px] flex items-center justify-center text-slate-900 dark:text-white" id="math-problem">
                         <!-- Math -->
                     </div>
                 </div>
 
                 <!-- Botón de Revelar Solución -->
                 <div class="pt-2 flex justify-center">
-                    <button onclick="toggleSolution()" class="w-full md:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-400 font-semibold text-sm rounded-lg flex items-center justify-center gap-2 transition">
+                    <button onclick="toggleSolution()" class="w-full md:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-blue-600 dark:text-blue-400 font-semibold text-sm rounded-lg flex items-center justify-center gap-2 transition">
                         <i data-lucide="eye" class="w-4 h-4"></i>
                         <span id="sol-btn-text">Ver Solución Paso a Paso</span>
                     </button>
                 </div>
 
                 <!-- Solución Paso a Paso -->
-                <div id="solution-container" class="hidden bg-slate-900/90 border border-blue-500/30 rounded-xl p-6 space-y-4">
-                    <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                <div id="solution-container" class="hidden bg-slate-50 dark:bg-slate-900/90 border border-blue-200 dark:border-blue-500/30 rounded-xl p-6 space-y-4">
+                    <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución Detallada
                     </h3>
-                    <div id="solution-box" class="space-y-3 text-slate-200 text-sm leading-relaxed">
+                    <div id="solution-box" class="space-y-3 text-slate-700 dark:text-slate-200 text-sm leading-relaxed">
                         <!-- Solución inyectada por JS -->
                     </div>
                 </div>
@@ -194,6 +210,10 @@
             lucide.createIcons();
         });
 
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
         function filterChapter() {
             renderTopicsSidebar();
         }
@@ -207,12 +227,12 @@
                 : topics.filter(t => t.chap === parseInt(chapFilter));
 
             list.innerHTML = filtered.map(topic => `
-                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-2.5 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-400' : 'border-transparent hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'} flex flex-col gap-0.5">
+                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-2.5 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-600 dark:text-blue-400 font-semibold' : 'border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'} flex flex-col gap-0.5">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono text-blue-400/80 font-bold">${topic.classNum}</span>
-                        <span class="text-[9px] font-mono text-purple-400/80">Cap. ${topic.chap}</span>
+                        <span class="text-[10px] font-mono text-blue-500 font-bold">${topic.classNum}</span>
+                        <span class="text-[9px] font-mono text-purple-500 dark:text-purple-400">Cap. ${topic.chap}</span>
                     </div>
-                    <span class="text-xs font-semibold truncate">${topic.title}</span>
+                    <span class="text-xs truncate">${topic.title}</span>
                 </button>
             `).join('');
         }
@@ -232,9 +252,9 @@
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`btn-${d}`);
                 if (d === diff) {
-                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-400";
+                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
                 } else {
-                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white";
+                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
                 }
             });
             
@@ -245,9 +265,21 @@
             generateNewExercise();
         }
 
-        // Generador de Ejercicios Variados por Plantillas
+        function renderMathInBox(element) {
+            if (window.renderMathInElement) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError : false
+                });
+            }
+        }
+
         function generateNewExercise() {
-            // Ocultar solución previa
             document.getElementById('solution-container').classList.add('hidden');
             document.getElementById('sol-btn-text').innerText = "Ver Solución Paso a Paso";
 
@@ -255,87 +287,75 @@
             const b = Math.floor(Math.random() * 4) + 1;
             const templates = [];
 
-            // Generación con formas variadas por tema
-            if (currentTopic.id === 'c1') { // Integrales Impropias Tipo I
+            if (currentTopic.id === 'c1') {
                 templates.push({
                     problem: `\\int_{1}^{\\infty} \\frac{${a}}{x^{${b+1}}} \\, dx`,
-                    solution: [
-                        `Reescribir como límite: $$\\lim_{t \\to \\infty} \\int_{1}^{t} ${a}x^{-${b+1}} \\, dx$$`,
-                        `Calcular la antiderivada: $$\\int ${a}x^{-${b+1}} \\, dx = -\\frac{${a}}{${b}x^{${b}}}$$`,
-                        `Evaluar el límite: $$\\lim_{t \\to \\infty} \\left[ -\\frac{${a}}{${b}t^{${b}}} + \\frac{${a}}{${b}(1)^{${b}}} \\right] = 0 + \\frac{${a}}{${b}}$$`,
-                        `**Conclusión:** La integral **converge** a $\\frac{${a}}{${b}}$.`
-                    ]
+                    solution: `
+1. Reescribir como límite:
+$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${a}x^{-${b+1}} \\, dx$$
+
+2. Calcular la antiderivada:
+$$\\int ${a}x^{-${b+1}} \\, dx = -\\frac{${a}}{${b}x^{${b}}}$$
+
+3. Evaluar el límite:
+$$\\lim_{t \\to \\infty} \\left[ -\\frac{${a}}{${b}t^{${b}}} + \\frac{${a}}{${b}(1)^{${b}}} \\right] = 0 + \\frac{${a}}{${b}}$$
+
+**Conclusión:** La integral **converge** a $\\frac{${a}}{${b}}$.
+`
                 });
                 templates.push({
                     problem: `\\int_{0}^{\\infty} x e^{-${a}x} \\, dx`,
-                    solution: [
-                        `Aplicar integración por partes: $u = x \\Rightarrow du = dx$ y $dv = e^{-${a}x}dx \\Rightarrow v = -\\frac{1}{${a}}e^{-${a}x}$.`,
-                        `Formular la integral: $$\\int x e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\int -\\frac{1}{${a}}e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\frac{1}{${a*a}}e^{-${a}x}$$`,
-                        `Evaluar el límite de $0$ a $\\infty$: $$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${a}}e^{-${a}t} - \\frac{1}{${a*a}}e^{-${a}t} \\right) - \\left( 0 - \\frac{1}{${a*a}} \\right) = \\frac{1}{${a*a}}$$`,
-                        `**Conclusión:** La integral **converge** a $\\frac{1}{${a*a}}$.`
-                    ]
+                    solution: `
+1. Aplicar integración por partes:
+   * $u = x \\Rightarrow du = dx$
+   * $dv = e^{-${a}x}dx \\Rightarrow v = -\\frac{1}{${a}}e^{-${a}x}$
+
+2. Formular la integral:
+$$\\int x e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\int -\\frac{1}{${a}}e^{-${a}x} dx = -\\frac{x}{${a}}e^{-${a}x} - \\frac{1}{${a*a}}e^{-${a}x}$$
+
+3. Evaluar el límite de $0$ a $\\infty$:
+$$\\lim_{t \\to \\infty} \\left( -\\frac{t}{${a}}e^{-${a}t} - \\frac{1}{${a*a}}e^{-${a}t} \\right) - \\left( 0 - \\frac{1}{${a*a}} \\right) = \\frac{1}{${a*a}}$$
+
+**Conclusión:** La integral **converge** a $\\frac{1}{${a*a}}$.
+`
                 });
-                templates.push({
-                    problem: `\\int_{2}^{\\infty} \\frac{dx}{x \\ln(x)^{${b+1}}}`,
-                    solution: [
-                        `Sustitución $u = \\ln(x) \\Rightarrow du = \\frac{dx}{x}$. Límites: $x=2 \\Rightarrow u=\\ln(2)$, $x=\\infty \\Rightarrow u=\\infty$.`,
-                        `Integral transformada: $$\\int_{\\ln(2)}^{\\infty} u^{-${b+1}} \\, du = \\lim_{t \\to \\infty} \\left[ -\\frac{1}{${b}u^{${b}}} \\right]_{\\ln(2)}^{t}$$`,
-                        `Evaluar: $$\\lim_{t \\to \\infty} \\left( -\\frac{1}{${b}t^{${b}}} \\right) + \\frac{1}{${b}(\\ln 2)^{${b}}} = \\frac{1}{${b}(\\ln 2)^{${b}}}$$`,
-                        `**Conclusión:** La integral **converge**.`
-                    ]
-                });
-            } else if (currentTopic.id === 'c21') { // Derivadas Parciales
+            } else if (currentTopic.id === 'c21') {
                 templates.push({
                     problem: `f(x, y) = ${a}x^3 y^2 - \\cos(${b}x) + e^{y}`,
-                    solution: [
-                        `Derivada parcial respecto a $x$ ($y$ constante): $$f_x(x,y) = ${a*3}x^2 y^2 + ${b}\\sin(${b}x)$$`,
-                        `Derivada parcial respecto a $y$ ($x$ constante): $$f_y(x,y) = ${a*2}x^3 y + e^y$$`
-                    ]
+                    solution: `
+1. Derivada parcial respecto a $x$ ($y$ tratada como constante):
+$$f_x(x,y) = ${a*3}x^2 y^2 + ${b}\\sin(${b}x)$$
+
+2. Derivada parcial respecto a $y$ ($x$ tratada como constante):
+$$f_y(x,y) = ${a*2}x^3 y + e^y$$
+`
                 });
-                templates.push({
-                    problem: `f(x, y) = \\ln(x^2 + ${a}y^2)`,
-                    solution: [
-                        `Aplica regla de la cadena para $x$: $$f_x(x,y) = \\frac{1}{x^2 + ${a}y^2} \\cdot 2x = \\frac{2x}{x^2 + ${a}y^2}$$`,
-                        `Aplica regla de la cadena para $y$: $$f_y(x,y) = \\frac{1}{x^2 + ${a}y^2} \\cdot ${a*2}y = \\frac{${a*2}y}{x^2 + ${a}y^2}$$`
-                    ]
-                });
-            } else { // Plantilla General con funciones variadas
+            } else {
                 templates.push({
                     problem: `\\iint_R (${a}x + ${b}y^2) \\, dA \\quad \\text{donde } R = [0, 1] \\times [0, 2]`,
-                    solution: [
-                        `Plantear la integral iterada: $$\\int_{0}^{1} \\int_{0}^{2} (${a}x + ${b}y^2) \\, dy \\, dx$$`,
-                        `Integrar primero respecto a $y$: $$\\int_{0}^{2} (${a}x + ${b}y^2) dy = \\left[ ${a}xy + \\frac{${b}}{3}y^3 \\right]_0^2 = ${a*2}x + \\frac{${b*8}}{3}$$`,
-                        `Integrar respecto a $x$: $$\\int_{0}^{1} \\left( ${a*2}x + \\frac{${b*8}}{3} \\right) dx = \\left[ ${a}x^2 + \\frac{${b*8}}{3}x \\right]_0^1 = ${a} + \\frac{${b*8}}{3}$$`
-                    ]
-                });
-                templates.push({
-                    problem: `f(x, y) = x^2 + y^2 - ${a*2}x - ${b*2}y + 5`,
-                    solution: [
-                        `Calcular derivadas primeras: $$f_x = 2x - ${a*2} = 0 \\Rightarrow x = ${a}$$, $$f_y = 2y - ${b*2} = 0 \\Rightarrow y = ${b}$$`,
-                        `Punto crítico único en $(${a}, ${b})$.`,
-                        `Segundas derivadas: $f_{xx} = 2$, $f_{yy} = 2$, $f_{xy} = 0$.`,
-                        `Discriminante Hessiano: $$D = f_{xx}f_{yy} - (f_{xy})^2 = (2)(2) - 0 = 4 > 0$$`,
-                        `Como $D > 0$ y $f_{xx} > 0$, en $(${a}, ${b})$ hay un **Mínimo Local**.`
-                    ]
+                    solution: `
+1. Plantear la integral iterada:
+$$\\int_{0}^{1} \\int_{0}^{2} (${a}x + ${b}y^2) \\, dy \\, dx$$
+
+2. Integrar primero respecto a $y$:
+$$\\int_{0}^{2} (${a}x + ${b}y^2) dy = \\left[ ${a}xy + \\frac{${b}}{3}y^3 \\right]_0^2 = ${a*2}x + \\frac{${b*8}}{3}$$
+
+3. Integrar respecto a $x$:
+$$\\int_{0}^{1} \\left( ${a*2}x + \\frac{${b*8}}{3} \\right) dx = \\left[ ${a}x^2 + \\frac{${b*8}}{3}x \\right]_0^1 = ${a} + \\frac{${b*8}}{3}$$
+`
                 });
             }
 
-            // Seleccionar plantilla aleatoria
             const selected = templates[Math.floor(Math.random() * templates.length)];
 
             // Renderizar Enunciado
             const problemDiv = document.getElementById('math-problem');
             problemDiv.innerHTML = `\\[ ${selected.problem} \\]`;
+            renderMathInBox(problemDiv);
 
-            // Renderizar Solución
+            // Guardar HTML de Markdown en la solución
             const solBox = document.getElementById('solution-box');
-            solBox.innerHTML = selected.solution.map(step => `<p>${step}</p>`).join('');
-
-            // Renderizar LaTeX en ambos elementos
-            if (window.renderMathInElement) {
-                renderMathInElement(problemDiv);
-                renderMathInElement(solBox);
-            }
+            solBox.innerHTML = marked.parse(selected.solution);
         }
 
         function toggleSolution() {
@@ -346,10 +366,7 @@
             if (container.classList.contains('hidden')) {
                 container.classList.remove('hidden');
                 btnText.innerText = "Ocultar Solución";
-                // Re-renderizar LaTeX para asegurar visualización perfecta al abrir
-                if (window.renderMathInElement) {
-                    renderMathInElement(solBox);
-                }
+                renderMathInBox(solBox);
             } else {
                 container.classList.add('hidden');
                 btnText.innerText = "Ver Solución Paso a Paso";
