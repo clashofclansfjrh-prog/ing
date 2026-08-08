@@ -162,8 +162,8 @@
     </div>
 
     <script>
-        // --- 1. BASE DE DATOS DE CLASES (AMPLIADA) ---
-      const db = {
+        // --- 1. BASE DE DATOS DE CLASES ---
+        const db = {
             'MAT1620': [
                 { id: 'c1_mat1620', classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
                 { id: 'c2_mat1620', classNum: 'Clase 02', title: 'Integrales Impropias Tipo II', desc: 'Discontinuidades en el intervalo.' },
@@ -180,6 +180,15 @@
                 { id: 'c3_fis1514', classNum: 'Clase 07', title: 'Leyes de Newton', desc: 'Fuerzas y dinámica de la partícula.' }
             ]
         };
+
+        let currentCourse = null;
+        let currentTopic = null;
+        let currentDifficulty = 'easy';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
         // --- 2. FUNCIONES DE INTERFAZ ---
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
 
@@ -301,7 +310,6 @@
             let m = getRnd(3, 10);
             let n = getRnd(2, 5);
             let s = rSign(); // Signo aleatorio +1 o -1
-            let sm = s === 1 ? '+' : '-';
             
             // EL MEGA DICCIONARIO DE EJERCICIOS
             const exerciseTemplates = {
@@ -462,94 +470,6 @@
             const solBox = document.getElementById('solution-box');
             solBox.innerHTML = marked.parse(selected.a);
             renderMathInBox(solBox);
-        }
-
-            // Variables aleatorias reutilizables en los enunciados
-            let k = getRnd(2, 9);
-            let p = getRnd(2, 7);
-            let m = getRnd(3, 10);
-            
-            // DICCIONARIO DE EJERCICIOS (Totalmente escalable)
-            const exerciseTemplates = {
-                'MAT1620': {
-                    'c1_mat1620': { // Impropias Tipo I
-                        'easy': [
-                            { q: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`, a: `**Paso 1:** Reemplazar el límite infinito por una variable $t$:\n $$ \\lim_{t \\to \\infty} \\int_{1}^{t} ${k} x^{-${p}} \\, dx $$ \n\n**Paso 2:** Integrar aplicando regla de potencias.` },
-                            { q: `\\int_{0}^{\\infty} e^{-${k}x} \\, dx`, a: `**Paso 1:** Evaluar el límite: $\\lim_{t \\to \\infty} \\int_{0}^{t} e^{-${k}x} \\, dx$.\n\n**Paso 2:** La antiderivada es $-\\frac{1}{${k}}e^{-${k}x}$.` }
-                        ],
-                        'medium': [
-                            { q: `\\int_{e}^{\\infty} \\frac{${k}}{x (\\ln x)^{${p}}} \\, dx`, a: `**Paso 1:** Usar sustitución $u = \\ln x$, $du = \\frac{1}{x}dx$.\n\n**Paso 2:** Los límites cambian de $1$ a $\\infty$. La integral queda como $\\int_{1}^{\\infty} \\frac{${k}}{u^{${p}}} du$.` }
-                        ],
-                        'hard': [
-                            { q: `\\int_{0}^{\\infty} x^{${k}} e^{-x} \\, dx`, a: `**Paso 1:** Esta es la estructura de la función Gamma. Se resuelve aplicando integración por partes repetidas veces o identificando $\\Gamma(${k+1})$.\n\n**Paso 2:** El resultado será ${k}!` }
-                        ]
-                    },
-                    'c2_mat1620': { // Impropias Tipo II
-                        'easy': [
-                            { q: `\\int_{0}^{${k}} \\frac{1}{\\sqrt{${k}-x}} \\, dx`, a: `**Paso 1:** Identificar la discontinuidad en $x = ${k}$.\n\n**Paso 2:** Plantear el límite: $\\lim_{t \\to ${k}^-} \\int_{0}^{t} (\\dots)$` }
-                        ],
-                        'medium': [ { q: `\\int_{0}^{${p}} \\frac{x}{x^2 - ${p}^2} \\, dx`, a: `**Paso 1:** Discontinuidad asintótica en $x = ${p}$. Usar sustitución $u = x^2 - ${p}^2$.` } ],
-                        'hard': [ { q: `\\int_{0}^{3} \\frac{1}{(x-1)^{${p/3}}} \\, dx`, a: `**Paso 1:** La discontinuidad está en el medio del intervalo ($x=1$). Dividir en dos integrales: $\\int_0^1 + \\int_1^3$.` } ]
-                    },
-                    'c3_mat1620': { // Varias Variables
-                         'easy': [ { q: `\\text{Halle el dominio de } f(x,y) = \\sqrt{${k} - x^2 - y^2}`, a: `El interior de la raíz debe ser $\\geq 0$, por ende $x^2 + y^2 \\leq ${k}$. Es un disco cerrado de radio $\\sqrt{${k}}$.` } ],
-                         'medium': [ { q: `\\text{Describa las curvas de nivel de } f(x,y) = \\ln(y - ${k}x^2)`, a: `Para $f(x,y)=c$, tenemos $y - ${k}x^2 = e^c \\implies y = ${k}x^2 + e^c$. Son parábolas abiertas hacia arriba.` } ],
-                         'hard': [ { q: `\\text{Halle el dominio de } f(x,y) = \\frac{\\arcsin(x/${p})}{\\sqrt{y - x^2}}`, a: `**Condición 1:** $-1 \\leq x/${p} \\leq 1 \\implies -${p} \\leq x \\leq ${p}$.\n\n**Condición 2:** $y - x^2 > 0 \\implies y > x^2$. La intersección de ambas regiones es el dominio.` } ]
-                    }
-                },
-                'MAT1203': {
-                    'c1_mat1203': { // Vectores
-                        'easy': [ { q: `\\vec{u} = \\langle ${k}, -${p} \\rangle, \\vec{v} = \\langle ${m}, ${k} \\rangle. \\text{ Calcule } \\vec{u} + 2\\vec{v}`, a: `Suma componente a componente:\n $\\langle ${k} + 2(${m}), -${p} + 2(${k}) \\rangle$` } ],
-                        'medium': [ { q: `\\text{Halle un vector unitario en la dirección de } \\vec{w} = \\langle ${k}, -${p}, ${m} \\rangle`, a: `**Paso 1:** Calcular norma $||\\vec{w}|| = \\sqrt{${k}^2 + (-${p})^2 + ${m}^2}$.\n\n**Paso 2:** Dividir cada componente por la norma.` } ],
-                        'hard': [ { q: `\\text{Halle la proyección ortogonal de } \\vec{u} = \\langle ${k}, ${p} \\rangle \\text{ sobre } \\vec{v} = \\langle -1, ${m} \\rangle`, a: `Fórmula: $\\text{Proy}_{\\vec{v}}\\vec{u} = \\left( \\frac{\\vec{u} \\cdot \\vec{v}}{||\\vec{v}||^2} \\right) \\vec{v}$` } ]
-                    },
-                    'c2_mat1203': { // Producto Punto y Cruz
-                        'easy': [ { q: `\\vec{u} = \\langle ${k}, -1, 2 \\rangle, \\vec{v} = \\langle 0, ${p}, 1 \\rangle. \\text{ Calcule } \\vec{u} \\cdot \\vec{v}`, a: `Producto punto: $(${k})(0) + (-1)(${p}) + (2)(1) = ${2-p}$.` } ],
-                        'medium': [ { q: `\\text{Halle } \\vec{u} \\times \\vec{v} \\text{ si } \\vec{u}=\\langle ${k}, 0, 1\\rangle, \\vec{v}=\\langle 1, ${p}, 0\\rangle`, a: `Usar determinante $3\\times3$ con $\\hat{i}, \\hat{j}, \\hat{k}$.` } ],
-                        'hard': [ { q: `\\text{Halle el área del triángulo con vértices en } (0,0,0), (${k},${p},0) \\text{ y } (1,1,${m})`, a: `**Paso 1:** Formar dos vectores desde el origen.\n\n**Paso 2:** El área es $\\frac{1}{2} || \\vec{v_1} \\times \\vec{v_2} ||$.` } ]
-                    }
-                },
-                'FIS1514': {
-                    'c1_fis1514': { // Cinemática 1D
-                        'easy': [ { q: `x(t) = ${k}t^2 - ${p}t + 5. \\text{ Halle la velocidad en } t=2\\text{s}`, a: `**Paso 1:** Derivar $x(t)$ para obtener $v(t) = ${2*k}t - ${p}$.\n\n**Paso 2:** Evaluar en $t=2$: $v(2) = ${2*k*2 - p}$ m/s.` } ],
-                        'medium': [ { q: `a(t) = ${k}t. \\text{ Si parte del reposo en } x=0, \\text{ halle } x(t)`, a: `Integrar dos veces. $v(t) = \\frac{${k}}{2}t^2$ y $x(t) = \\frac{${k}}{6}t^3$.` } ],
-                        'hard': [ { q: `v(x) = ${k}x^{1/2}. \\text{ Determine la aceleración en función de } x.`, a: `Usar regla de la cadena: $a = v \\frac{dv}{dx}$.\n\n $a = (${k}x^{1/2}) \\cdot \\frac{d}{dx}(${k}x^{1/2}) = (${k}x^{1/2})(${k/2}x^{-1/2}) = ${k*k/2}$ m/s².` } ]
-                    },
-                    'c2_fis1514': { // Tiro Parabólico
-                         'easy': [ { q: `\\text{Un proyectil se lanza a } ${k*10}\\text{m/s} \\text{ con ángulo de } 30^\\circ. \\text{ Halle } v_{0x} \\text{ y } v_{0y}`, a: `$v_{0x} = ${k*10} \\cos(30^\\circ)$\n\n$v_{0y} = ${k*10} \\sin(30^\\circ)$` } ],
-                         'medium': [ { q: `\\text{Desde una torre de } ${m*10}\\text{m} \\text{ se lanza un objeto horizontalmente a } ${p}\\text{m/s}. \\text{ Halle el tiempo de vuelo.}`, a: `En $y$: $y(t) = h - \\frac{1}{2}gt^2 = 0 \\implies t = \\sqrt{\\frac{2(${m*10})}{9.8}}$.` } ],
-                         'hard': [ { q: `\\text{Halle el ángulo de lanzamiento } \\theta \\text{ para que el alcance máximo horizontal sea igual a } ${k} \\text{ veces la altura máxima.}`, a: `Alcance $R = \\frac{v_0^2 \\sin(2\\theta)}{g}$. Altura $H = \\frac{v_0^2 \\sin^2(\\theta)}{2g}$.\n\nIgualar $R = ${k}H$ y despejar $\\tan(\\theta)$.` } ]
-                    }
-                }
-            };
-
-            // Lógica de selección buscando en el diccionario
-            let selected = null;
-            
-            if (exerciseTemplates[currentCourse] && 
-                exerciseTemplates[currentCourse][currentTopic.id] && 
-                exerciseTemplates[currentCourse][currentTopic.id][currentDifficulty]) {
-                
-                const variants = exerciseTemplates[currentCourse][currentTopic.id][currentDifficulty];
-                const variantIndex = getRnd(0, variants.length - 1);
-                selected = variants[variantIndex];
-            } else {
-                // Fallback de seguridad si no hay plantillas cargadas para esa combinación exacta
-                selected = { 
-                    q: `Ejercicio en construcción para \\text{${currentCourse}} - \\text{${currentDifficulty}}`, 
-                    a: `Estamos añadiendo más ejercicios a esta sección. Vuelve pronto.` 
-                };
-            }
-
-            // Inyectar en el HTML
-            const problemDiv = document.getElementById('math-problem');
-            // Nota: Envolvemos en divs para que separemos texto de bloque math si hay mezcla
-            problemDiv.innerHTML = `\\[ ${selected.q} \\]`;
-            renderMathInBox(problemDiv);
-
-            const solBox = document.getElementById('solution-box');
-            solBox.innerHTML = marked.parse(selected.a);
-            renderMathInBox(solBox); // Renderizar math dentro del markdown
         }
     </script>
 </body>
