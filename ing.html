@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngineersHub - Cálculo II</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX para renderizar LaTeX perfecto -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-2 rounded-lg">
+                    <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide">ENGINEERS<span class="text-blue-500">HUB</span></h1>
+                    <p class="text-xs text-slate-400">Plataforma Académica de Ingeniería</p>
+                </div>
+            </div>
+            <nav class="flex items-center gap-2">
+                <button class="px-4 py-2 text-sm font-medium bg-blue-600/10 text-blue-400 border border-blue-500/20 rounded-lg flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    Cálculo II
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar Navigation: Clases y Temas -->
+        <aside class="lg:col-span-1 space-y-6">
+            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i data-lucide="list-tree" class="w-4 h-4"></i> Temario Clase a Clase
+                </h2>
+                <nav id="topics-list" class="space-y-1">
+                    <!-- Inyectado por JS -->
+                </nav>
+            </div>
+
+            <!-- Filtro de Dificultad -->
+            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i data-lucide="sliders" class="w-4 h-4"></i> Nivel de Dificultad
+                </h2>
+                <div class="grid grid-cols-3 gap-2" id="difficulty-selector">
+                    <button onclick="setDifficulty('easy')" id="btn-easy" class="py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                        Fácil
+                    </button>
+                    <button onclick="setDifficulty('medium')" id="btn-medium" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white">
+                        Medio
+                    </button>
+                    <button onclick="setDifficulty('hard')" id="btn-hard" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white">
+                        Avanzado
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Area de Ejercicios -->
+        <main class="lg:col-span-3 space-y-6">
+            
+            <!-- Banner del Tema Actual -->
+            <div class="bg-gradient-to-r from-blue-900/40 via-slate-800/50 to-slate-800/50 border border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span id="current-class-tag" class="text-xs font-mono bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
+                    <h2 id="current-topic-title" class="text-2xl font-bold text-white mt-2">Integrales Indefinidas y Cambio de Variable</h2>
+                    <p id="current-topic-desc" class="text-sm text-slate-400 mt-1">Práctica de métodos de integración básicos y técnicas de sustitución u.</p>
+                </div>
+                <button onclick="generateNewExercise()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                    Nuevo Ejercicio
+                </button>
+            </div>
+
+            <!-- Card del Ejercicio -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-6 md:p-8 space-y-6">
+                
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+                    <span class="text-xs font-mono text-slate-400 flex items-center gap-2">
+                        <i data-lucide="code" class="w-4 h-4 text-blue-400"></i> Ejercicio Generado Dinámicamente
+                    </span>
+                    <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        Dificultad: Fácil
+                    </span>
+                </div>
+
+                <!-- Enunciado LaTeX -->
+                <div class="space-y-3">
+                    <p class="text-slate-300 font-medium">Resuelve la siguiente integral e indica el resultado final:</p>
+                    <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto" id="math-problem">
+                        <!-- Renderizado de Math -->
+                    </div>
+                </div>
+
+                <!-- Input de Respuesta -->
+                <div class="space-y-3 pt-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Respuesta (expresión matemática o resultado):</label>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <input type="text" id="user-answer" placeholder="Ej: (x^3)/3 + C" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition font-mono text-sm">
+                        <button onclick="checkAnswer()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i> Comprobar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div id="feedback-box" class="hidden p-4 rounded-lg text-sm border"></div>
+
+                <!-- Solución Paso a Paso (Acordeón) -->
+                <div class="border-t border-slate-700/50 pt-4">
+                    <button onclick="toggleSolution()" class="text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-blue-400"></i>
+                        <span>Ver Solución Paso a Paso</span>
+                        <i data-lucide="chevron-down" id="chevron-sol" class="w-4 h-4 transition-transform"></i>
+                    </button>
+                    <div id="solution-box" class="hidden mt-4 p-5 bg-slate-900/60 border border-slate-800 rounded-lg text-sm space-y-3 font-mono text-slate-300">
+                        <!-- Solución inyectada por JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Script de la Aplicación -->
+    <script>
+        // Data del temario Clase a Clase de Cálculo II
+        const topics = [
+            { id: 't1', classNum: 'Clase 01', title: 'Integrales Indefinidas y Sustitución', desc: 'Método de cambio de variable u.' },
+            { id: 't2', classNum: 'Clase 02', title: 'Integración por Partes', desc: 'Fórmula de integración por partes: ∫u dv = uv - ∫v du.' },
+            { id: 't3', classNum: 'Clase 03', title: 'Integrales Trigonométricas y Sustitución', desc: 'Potencias trigonométricas y sustitución trigonométrica.' },
+            { id: 't4', classNum: 'Clase 04', title: 'Fracciones Parciales', desc: 'Descomposición de funciones racionales.' },
+            { id: 't5', classNum: 'Clase 05', title: 'Integrales Impropias', desc: 'Límites infinitos y discontinuidades.' },
+            { id: 't6', classNum: 'Clase 06', title: 'Aplicaciones: Áreas y Volúmenes', desc: 'Área entre curvas y sólidos de revolución.' }
+        ];
+
+        let currentTopic = topics[0];
+        let currentDifficulty = 'easy';
+        let currentExercise = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTopicsSidebar();
+            generateNewExercise();
+            lucide.createIcons();
+        });
+
+        // Renderizar lista de temas
+        function renderTopicsSidebar() {
+            const list = document.getElementById('topics-list');
+            list.innerHTML = topics.map(topic => `
+                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-3 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-400' : 'border-transparent hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'} flex flex-col gap-1">
+                    <span class="text-[10px] font-mono text-blue-400/80 font-bold">${topic.classNum}</span>
+                    <span class="text-xs font-semibold">${topic.title}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectTopic(topicId) {
+            currentTopic = topics.find(t => t.id === topicId);
+            document.getElementById('current-class-tag').innerText = currentTopic.classNum;
+            document.getElementById('current-topic-title').innerText = currentTopic.title;
+            document.getElementById('current-topic-desc').innerText = currentTopic.desc;
+            renderTopicsSidebar();
+            generateNewExercise();
+        }
+
+        function setDifficulty(diff) {
+            currentDifficulty = diff;
+            ['easy', 'medium', 'hard'].forEach(d => {
+                const btn = document.getElementById(`btn-${d}`);
+                if (d === diff) {
+                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-400";
+                } else {
+                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-slate-700 bg-slate-800 text-slate-400 hover:text-white";
+                }
+            });
+            
+            const badge = document.getElementById('badge-difficulty');
+            const labels = { easy: 'Fácil', medium: 'Intermedio', hard: 'Avanzado' };
+            badge.innerText = `Dificultad: ${labels[diff]}`;
+
+            generateNewExercise();
+        }
+
+        // Generador dinámico de ejercicios matemáticos según tema y dificultad
+        function generateNewExercise() {
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('solution-box').classList.add('hidden');
+            document.getElementById('user-answer').value = '';
+
+            const a = Math.floor(Math.random() * 8) + 2; // Constante aleatoria 2-9
+            const n = Math.floor(Math.random() * 4) + 2; // Exponente aleatorio 2-5
+
+            if (currentTopic.id === 't1') {
+                // Tema 1: Integrales Indefinidas y Sustitución
+                if (currentDifficulty === 'easy') {
+                    currentExercise = {
+                        latex: `\\int ${a}x^{${n}} \\, dx`,
+                        rawAns: `${a}/${n+1}*x^${n+1}`,
+                        solution: `1. Aplica la regla de la potencia: $\\int x^n dx = \\frac{x^{n+1}}{n+1}$\n2. Multiplica por la constante $${a}$: $\\frac{${a}}{${n+1}}x^{${n+1}} + C$`
+                    };
+                } else if (currentDifficulty === 'medium') {
+                    currentExercise = {
+                        latex: `\\int (x^2 + ${a})^{${n}} (2x) \\, dx`,
+                        rawAns: `(x^2+${a})^${n+1}/${n+1}`,
+                        solution: `1. Haz la sustitución $u = x^2 + ${a}$, por lo que $du = 2x dx$.\n2. La integral se transforma en $\\int u^{${n}} du$.\n3. Integra: $\\frac{u^{${n+1}}}{${n+1}} + C = \\frac{(x^2 + ${a})^{${n+1}}}{${n+1}} + C$`
+                    };
+                } else {
+                    currentExercise = {
+                        latex: `\\int \\frac{${a}x}{\\sqrt{x^2 + ${a*2}}} \\, dx`,
+                        rawAns: `${a}*sqrt(x^2+${a*2})`,
+                        solution: `1. Usa $u = x^2 + ${a*2}$, entonces $du = 2x dx \\Rightarrow x dx = \\frac{du}{2}$.\n2. Reemplaza: $\\frac{${a}}{2} \\int u^{-1/2} du = ${a} u^{1/2} + C$.\n3. Resultado: $${a}\\sqrt{x^2 + ${a*2}} + C$`
+                    };
+                }
+            } else if (currentTopic.id === 't2') {
+                // Tema 2: Por Partes
+                if (currentDifficulty === 'easy') {
+                    currentExercise = {
+                        latex: `\\int x e^{${a}x} \\, dx`,
+                        rawAns: `x*e^(${a}x)/${a} - e^(${a}x)/${a^2}`,
+                        solution: `1. Usa $u = x \\Rightarrow du = dx$ y $dv = e^{${a}x}dx \\Rightarrow v = \\frac{1}{${a}}e^{${a}x}$.\n2. Aplica $\\int u dv = uv - \\int v du$.\n3. Resultado: $\\frac{x e^{${a}x}}{${a}} - \\frac{e^{${a}x}}{${a^2}} + C$`
+                    };
+                } else {
+                    currentExercise = {
+                        latex: `\\int x^{${n}} \\ln(x) \\, dx`,
+                        rawAns: `(x^${n+1}*ln(x))/${n+1} - x^${n+1}/${(n+1)*(n+1)}`,
+                        solution: `1. Selecciona $u = \\ln(x) \\Rightarrow du = \\frac{1}{x}dx$ y $dv = x^{${n}}dx \\Rightarrow v = \\frac{x^{${n+1}}}{${n+1}}$.\n2. Aplica la fórmula e integra el segundo término.`
+                    };
+                }
+            } else {
+                // Fallback / Otros Temas
+                currentExercise = {
+                    latex: `\\int \\sin(${a}x) \\, dx`,
+                    rawAns: `-cos(${a}x)/${a}`,
+                    solution: `1. Usa el cambio directo de variable $u = ${a}x$.\n2. Resultado: $-\\frac{\\cos(${a}x)}{${a}} + C$`
+                };
+            }
+
+            // Renderizar la integral en pantalla con KaTeX
+            const problemDiv = document.getElementById('math-problem');
+            problemDiv.innerHTML = `\\[ ${currentExercise.latex} \\]`;
+            renderMathInElement(problemDiv);
+
+            // Renderizar la solución paso a paso
+            const solDiv = document.getElementById('solution-box');
+            solDiv.innerHTML = currentExercise.solution.replace(/\n/g, '<br>');
+            renderMathInElement(solDiv);
+        }
+
+        function checkAnswer() {
+            const userVal = document.getElementById('user-answer').value.trim();
+            const feedbackBox = document.getElementById('feedback-box');
+
+            if (!userVal) {
+                feedbackBox.className = "p-4 rounded-lg text-sm bg-amber-500/10 border border-amber-500/20 text-amber-400";
+                feedbackBox.innerText = "Por favor, escribe una respuesta antes de comprobar.";
+                feedbackBox.classList.remove('hidden');
+                return;
+            }
+
+            // Verificación simple (Se puede mejorar comparando estructuras)
+            feedbackBox.className = "p-4 rounded-lg text-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-400";
+            feedbackBox.innerHTML = `<strong>¡Ejercicio enviado correctamente!</strong><br>Compara la estructura de tu respuesta con la solución detallada abajo.`;
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function toggleSolution() {
+            const solBox = document.getElementById('solution-box');
+            const chevron = document.getElementById('chevron-sol');
+            solBox.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+    </script>
+</body>
+</html>
