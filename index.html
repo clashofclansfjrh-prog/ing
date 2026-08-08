@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EngineersHub - MAT1620 Cálculo II (PUC)</title>
+    <title>EngineersHub - Portal de Práctica</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,49 +22,77 @@
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
-    <!-- Header / Navbar -->
+    <!-- Header -->
     <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2 rounded-lg">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                <div class="bg-blue-600 p-2 rounded-lg flex items-center justify-center">
                     <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight tracking-wide text-slate-900 dark:text-white">ENGINEERS<span class="text-blue-500">HUB</span></h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">MAT1620 - Cálculo II (UC)</p>
+                    <p id="header-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Selección de Curso</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3">
-                <!-- Toggle Modo Oscuro / Claro -->
                 <button onclick="toggleTheme()" class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-                    <i data-lucide="sun" id="theme-icon-sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" id="theme-icon-moon" class="w-5 h-5 block dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
                 </button>
-                
-                <span class="hidden sm:inline-block px-3 py-1 text-xs font-mono bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-lg">
-                    40 Clases Oficiales
-                </span>
             </div>
         </div>
     </header>
 
-    <!-- Main Layout -->
-    <div class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- HOME VIEW (Selector de Cursos) -->
+    <div id="home-view" class="max-w-5xl mx-auto px-4 py-12 flex-1 w-full flex flex-col items-center justify-center space-y-8">
+        <div class="text-center space-y-3">
+            <h2 class="text-3xl font-bold">Bienvenido a tu entorno de práctica</h2>
+            <p class="text-slate-500 dark:text-slate-400">Selecciona la asignatura que deseas estudiar hoy.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+            <!-- Curso Cálculo -->
+            <div onclick="selectCourse('MAT1620')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 cursor-pointer hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-lg transition group">
+                <div class="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i data-lucide="function-square" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="font-bold text-lg">Cálculo II</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">MAT1620</p>
+            </div>
+
+            <!-- Curso Álgebra Lineal -->
+            <div onclick="selectCourse('MAT1203')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 cursor-pointer hover:border-purple-500 dark:hover:border-purple-500 hover:shadow-lg transition group">
+                <div class="bg-purple-100 dark:bg-purple-900/30 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i data-lucide="grid" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="font-bold text-lg">Álgebra Lineal</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">MAT1203</p>
+            </div>
+
+            <!-- Curso Dinámica -->
+            <div onclick="selectCourse('FIS1514')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 cursor-pointer hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg transition group">
+                <div class="bg-emerald-100 dark:bg-emerald-900/30 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i data-lucide="rocket" class="w-6 h-6 text-emerald-600 dark:text-emerald-400"></i>
+                </div>
+                <h3 class="font-bold text-lg">Dinámica</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">FIS1514</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP VIEW (Contenedor de Ejercicios) -->
+    <div id="app-view" class="hidden max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid-cols-1 lg:grid-cols-4 gap-8">
         
         <!-- Sidebar Navigation -->
         <aside class="lg:col-span-1 space-y-6">
             <div class="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
+                <button onclick="goHome()" class="w-full mb-4 px-3 py-2 text-xs font-semibold bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver a Cursos
+                </button>
                 <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <i data-lucide="list-tree" class="w-4 h-4"></i> Programa de Clases
                 </h2>
-                <select id="chapter-select" onchange="filterChapter()" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs text-slate-800 dark:text-slate-200 mb-3 focus:outline-none focus:border-blue-500">
-                    <option value="all">Todos los Capítulos</option>
-                    <option value="1">Capítulo 1: Integrales Impropias y Series</option>
-                    <option value="2">Capítulo 2: Funciones Varias Variables</option>
-                    <option value="3">Capítulo 3: Integrales Múltiples</option>
-                </select>
-
                 <div id="topics-list" class="space-y-1 max-h-[420px] overflow-y-auto pr-1">
                     <!-- Inyectado por JS -->
                 </div>
@@ -79,10 +107,10 @@
                     <button onclick="setDifficulty('easy')" id="btn-easy" class="py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                         Fácil
                     </button>
-                    <button onclick="setDifficulty('medium')" id="btn-medium" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    <button onclick="setDifficulty('medium')" id="btn-medium" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         Medio
                     </button>
-                    <button onclick="setDifficulty('hard')" id="btn-hard" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    <button onclick="setDifficulty('hard')" id="btn-hard" class="py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         Avanzado
                     </button>
                 </div>
@@ -92,43 +120,37 @@
         <!-- Area de Ejercicios -->
         <main class="lg:col-span-3 space-y-6">
             
-            <!-- Banner del Tema Actual -->
-            <div class="bg-gradient-to-r from-blue-500/10 via-white to-white dark:from-blue-900/40 dark:via-slate-800/50 dark:to-slate-800/50 border border-blue-200 dark:border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-none">
+            <div class="bg-gradient-to-r from-blue-500/10 via-white to-white dark:from-blue-900/40 dark:via-slate-800/50 dark:to-slate-800/50 border border-blue-200 dark:border-blue-500/20 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-2">
-                        <span id="current-class-tag" class="text-xs font-mono bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
-                        <span id="current-chapter-tag" class="text-xs font-mono bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-300 px-2.5 py-1 rounded-md border border-purple-500/30">Capítulo 1</span>
+                        <span id="current-class-tag" class="text-xs font-mono bg-blue-500/10 text-blue-600 px-2.5 py-1 rounded-md border border-blue-500/30">Clase 01</span>
                     </div>
-                    <h2 id="current-topic-title" class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Integrales Impropias Tipo I</h2>
-                    <p id="current-topic-desc" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Análisis de convergencia en intervalos infinitos.</p>
+                    <h2 id="current-topic-title" class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Tema</h2>
+                    <p id="current-topic-desc" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Descripción</p>
                 </div>
                 <button onclick="generateNewExercise()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                    Generar Otro Ejercicio
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Generar Variante
                 </button>
             </div>
 
             <!-- Card del Ejercicio -->
-            <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 rounded-xl p-6 md:p-8 space-y-6 shadow-sm dark:shadow-none">
+            <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 rounded-xl p-6 md:p-8 space-y-6">
                 
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/50 pb-4">
-                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                    <span class="text-xs font-mono text-slate-500 flex items-center gap-2">
                         <i data-lucide="calculator" class="w-4 h-4 text-blue-500"></i> Enunciado del Problema
                     </span>
-                    <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span id="badge-difficulty" class="text-xs px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                         Dificultad: Fácil
                     </span>
                 </div>
 
-                <!-- Enunciado -->
                 <div class="space-y-3">
-                    <p class="text-slate-700 dark:text-slate-300 font-medium">Analiza y resuelve el siguiente ejercicio:</p>
-                    <div class="p-6 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto min-h-[100px] flex items-center justify-center text-slate-900 dark:text-white" id="math-problem">
-                        <!-- Math -->
+                    <p class="text-slate-700 dark:text-slate-300 font-medium">Resuelve el siguiente ejercicio:</p>
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-lg text-center text-xl md:text-2xl overflow-x-auto min-h-[100px] flex items-center justify-center" id="math-problem">
                     </div>
                 </div>
 
-                <!-- Botón de Revelar Solución -->
                 <div class="pt-2 flex justify-center">
                     <button onclick="toggleSolution()" class="w-full md:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-blue-600 dark:text-blue-400 font-semibold text-sm rounded-lg flex items-center justify-center gap-2 transition">
                         <i data-lucide="eye" class="w-4 h-4"></i>
@@ -136,77 +158,39 @@
                     </button>
                 </div>
 
-                <!-- Solución Paso a Paso -->
                 <div id="solution-container" class="hidden bg-slate-50 dark:bg-slate-900/90 border border-blue-200 dark:border-blue-500/30 rounded-xl p-6 space-y-4">
                     <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución Detallada
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Resolución
                     </h3>
                     <div id="solution-box" class="space-y-3 text-slate-700 dark:text-slate-200 text-sm leading-relaxed">
-                        <!-- Solución inyectada por JS -->
                     </div>
                 </div>
-
             </div>
-
         </main>
     </div>
 
-    <!-- Script de la Aplicación -->
     <script>
-        const topics = [
-            // Capítulo 1
-            { id: 'c1', chap: 1, classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
-            { id: 'c2', chap: 1, classNum: 'Clase 02', title: 'Integrales Impropias Tipo II', desc: 'Integrandos discontinuos y asíntotas verticales.' },
-            { id: 'c3', chap: 1, classNum: 'Clase 03', title: 'Criterios de Comparación', desc: 'Comparación directa y comparación en el límite.' },
-            { id: 'c4', chap: 1, classNum: 'Clase 04', title: 'Sucesiones y Límites', desc: 'Sucesiones numéricas y cálculo de sus límites.' },
-            { id: 'c5', chap: 1, classNum: 'Clase 05', title: 'Sucesiones Monótonas y Acotadas', desc: 'Criterios de convergencia para sucesiones.' },
-            { id: 'c6', chap: 1, classNum: 'Clase 06', title: 'Series y Sumas Parciales', desc: 'Definición de convergencia de series.' },
-            { id: 'c7', chap: 1, classNum: 'Clase 07', title: 'Criterio de la Integral', desc: 'Prueba de la integral para series numéricas.' },
-            { id: 'c8', chap: 1, classNum: 'Clase 08', title: 'Criterios de Comparación en Series', desc: 'Comparación directa y límite para series.' },
-            { id: 'c9', chap: 1, classNum: 'Clase 09', title: 'Series Alternantes', desc: 'Criterio de Leibniz y estimación de errores.' },
-            { id: 'c10', chap: 1, classNum: 'Clase 10', title: 'Criterios de la Raíz y Razón', desc: 'Convergencia absoluta y cociente.' },
-            { id: 'c11', chap: 1, classNum: 'Clase 11', title: 'Series de Potencias', desc: 'Radio e intervalo de convergencia.' },
-            { id: 'c12', chap: 1, classNum: 'Clase 12', title: 'Representación de Funciones', desc: 'Derivación e integración de series de potencias.' },
-            { id: 'c13', chap: 1, classNum: 'Clase 13', title: 'Series de Taylor y Maclaurin', desc: 'Desarrollo en serie de funciones clásicas.' },
-            
-            // Capítulo 2
-            { id: 'c14', chap: 2, classNum: 'Clase 14', title: 'Espacio R3 y Vectores', desc: 'Sistemas coordenados y operaciones vectoriales.' },
-            { id: 'c15', chap: 2, classNum: 'Clase 15', title: 'Producto Punto y Cruz', desc: 'Producto escalar, vectorial y producto triple.' },
-            { id: 'c16', chap: 2, classNum: 'Clase 16', title: 'Rectas y Planos en R3', desc: 'Ecuaciones de rectas, planos y distancias.' },
-            { id: 'c17', chap: 2, classNum: 'Clase 17', title: 'Funciones de Varias Variables', desc: 'Dominio y rango en dos o más variables.' },
-            { id: 'c18', chap: 2, classNum: 'Clase 18', title: 'Gráficas y Superficies Cuadráticas', desc: 'Curvas de nivel y cuadráticas.' },
-            { id: 'c19', chap: 2, classNum: 'Clase 19', title: 'Límites Multivariables', desc: 'Cálculo de límites y coordenadas polares.' },
-            { id: 'c20', chap: 2, classNum: 'Clase 20', title: 'Continuidad', desc: 'Continuidad en funciones de R^n a R.' },
-            { id: 'c21', chap: 2, classNum: 'Clase 21', title: 'Derivadas Parciales', desc: 'Interpretación geométrica y cálculo básico.' },
-            { id: 'c22', chap: 2, classNum: 'Clase 22', title: 'Derivadas de Orden Superior', desc: 'Teorema de Clairaut y derivadas cruzadas.' },
-            { id: 'c23', chap: 2, classNum: 'Clase 23', title: 'Plano Tangente y Diferenciabilidad', desc: 'Aproximación lineal y planos tangentes.' },
-            { id: 'c24', chap: 2, classNum: 'Clase 24', title: 'Regla de la Cadena', desc: 'Derivación de funciones compuestas multivariables.' },
-            { id: 'c25', chap: 2, classNum: 'Clase 25', title: 'Derivación Implícita', desc: 'Aplicación de regla de la cadena implícita.' },
-            { id: 'c26', chap: 2, classNum: 'Clase 26', title: 'Derivada Direccional y Gradiente', desc: 'Vector gradiente y dirección de máximo crecimiento.' },
-            { id: 'c27', chap: 2, classNum: 'Clase 27', title: 'Máximos, Mínimos y Puntos Silla', desc: 'Puntos críticos y matriz Hessiana.' },
-            { id: 'c28', chap: 2, classNum: 'Clase 28', title: 'Criterio de la Segunda Derivada', desc: 'Clasificación de puntos críticos.' },
-            { id: 'c29', chap: 2, classNum: 'Clase 29', title: 'Extremos Absolutos', desc: 'Optimización en regiones cerradas y acotadas.' },
-            { id: 'c30', chap: 3, classNum: 'Clase 30', title: 'Multiplicadores de Lagrange', desc: 'Optimización con una restricción.' },
-            { id: 'c31', chap: 2, classNum: 'Clase 31', title: 'Lagrange con Varias Restricciones', desc: 'Problemas avanzados de optimización con restricciones.' },
+        // Bases de datos de los cursos
+        const db = {
+            'MAT1620': [
+                { id: 'c1_mat1620', classNum: 'Clase 01', title: 'Integrales Impropias Tipo I', desc: 'Intervalos infinitos de integración.' },
+                { id: 'c2_mat1620', classNum: 'Clase 02', title: 'Funciones Varias Variables', desc: 'Dominio y curvas de nivel.' }
+            ],
+            'MAT1203': [
+                { id: 'c1_mat1203', classNum: 'Clase 01', title: 'Vectores en el Plano y Espacio', desc: 'Geometría y álgebra de vectores.' },
+                { id: 'c5_mat1203', classNum: 'Clase 05', title: 'Sistemas Lineales', desc: 'Representación geométrica matricial.' }
+            ],
+            'FIS1514': [
+                { id: 'c1_fis1514', classNum: 'Clase 01', title: 'Cinemática 1D', desc: 'Posición, velocidad y aceleración en una dimensión.' },
+                { id: 'c2_fis1514', classNum: 'Clase 07', title: 'Leyes de Newton', desc: 'Dinámica de la partícula.' }
+            ]
+        };
 
-            // Capítulo 3
-            { id: 'c32', chap: 3, classNum: 'Clase 32', title: 'Integrales Dobles sobre Rectángulos', desc: 'Integrales iteradas y Teorema de Fubini.' },
-            { id: 'c33', chap: 3, classNum: 'Clase 33', title: 'Integrales Dobles en Regiones Generales', desc: 'Regiones Tipo I y Tipo II.' },
-            { id: 'c34', chap: 3, classNum: 'Clase 34', title: 'Propiedades y Volúmenes', desc: 'Cálculo de volúmenes con integrales dobles.' },
-            { id: 'c35', chap: 3, classNum: 'Clase 35', title: 'Coordenadas Polares en Integrales', desc: 'Cambio de variables a coordenadas polares.' },
-            { id: 'c36', chap: 3, classNum: 'Clase 36', title: 'Integrales Triples', desc: 'Integración en regiones tridimensionales.' },
-            { id: 'c37', chap: 3, classNum: 'Clase 37', title: 'Cálculo de Volúmenes Triples', desc: 'Regiones del Tipo 1, 2 y 3 en R3.' },
-            { id: 'c38', chap: 3, classNum: 'Clase 38', title: 'Coordenadas Cilíndricas', desc: 'Integrales triples usando coordenadas cilíndricas.' },
-            { id: 'c39', chap: 3, classNum: 'Clase 39', title: 'Coordenadas Esféricas', desc: 'Integrales triples usando coordenadas esféricas.' },
-            { id: 'c40', chap: 3, classNum: 'Clase 40', title: 'Transformaciones y Jacobiano', desc: 'Cambio general de variables en integrales múltiples.' }
-        ];
-
-        let currentTopic = topics[0];
+        let currentCourse = null;
+        let currentTopic = null;
         let currentDifficulty = 'easy';
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderTopicsSidebar();
-            generateNewExercise();
             lucide.createIcons();
         });
 
@@ -214,33 +198,46 @@
             document.documentElement.classList.toggle('dark');
         }
 
-        function filterChapter() {
+        function goHome() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('home-view').classList.add('flex');
+            
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('grid');
+            
+            document.getElementById('header-subtitle').innerText = "Selección de Curso";
+            currentCourse = null;
+        }
+
+        function selectCourse(courseCode) {
+            currentCourse = courseCode;
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('flex');
+            
+            document.getElementById('app-view').classList.remove('hidden');
+            document.getElementById('app-view').classList.add('grid');
+            
+            document.getElementById('header-subtitle').innerText = courseCode;
+            
             renderTopicsSidebar();
+            selectTopic(db[courseCode][0].id); // Selecciona el primer tema por defecto
         }
 
         function renderTopicsSidebar() {
-            const chapFilter = document.getElementById('chapter-select').value;
             const list = document.getElementById('topics-list');
-            
-            const filtered = chapFilter === 'all' 
-                ? topics 
-                : topics.filter(t => t.chap === parseInt(chapFilter));
+            const topics = db[currentCourse];
 
-            list.innerHTML = filtered.map(topic => `
-                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-2.5 rounded-lg border transition-all ${topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-600 dark:text-blue-400 font-semibold' : 'border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'} flex flex-col gap-0.5">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono text-blue-500 font-bold">${topic.classNum}</span>
-                        <span class="text-[9px] font-mono text-purple-500 dark:text-purple-400">Cap. ${topic.chap}</span>
-                    </div>
+            list.innerHTML = topics.map(topic => `
+                <button onclick="selectTopic('${topic.id}')" class="w-full text-left p-2.5 rounded-lg border transition-all ${currentTopic && topic.id === currentTopic.id ? 'bg-blue-600/10 border-blue-500/30 text-blue-600 dark:text-blue-400 font-semibold' : 'border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'} flex flex-col gap-0.5">
+                    <span class="text-[10px] font-mono text-blue-500 font-bold">${topic.classNum}</span>
                     <span class="text-xs truncate">${topic.title}</span>
                 </button>
             `).join('');
         }
 
         function selectTopic(topicId) {
-            currentTopic = topics.find(t => t.id === topicId);
+            currentTopic = db[currentCourse].find(t => t.id === topicId);
             document.getElementById('current-class-tag').innerText = currentTopic.classNum;
-            document.getElementById('current-chapter-tag').innerText = `Capítulo ${currentTopic.chap}`;
             document.getElementById('current-topic-title').innerText = currentTopic.title;
             document.getElementById('current-topic-desc').innerText = currentTopic.desc;
             renderTopicsSidebar();
@@ -249,19 +246,17 @@
 
         function setDifficulty(diff) {
             currentDifficulty = diff;
+            const styles = {
+                active: "py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                inactive: "py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            };
+
             ['easy', 'medium', 'hard'].forEach(d => {
-                const btn = document.getElementById(`btn-${d}`);
-                if (d === diff) {
-                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
-                } else {
-                    btn.className = "py-2 text-xs font-semibold rounded-lg border transition-all border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-                }
+                document.getElementById(`btn-${d}`).className = (d === diff) ? styles.active : styles.inactive;
             });
             
-            const badge = document.getElementById('badge-difficulty');
             const labels = { easy: 'Fácil', medium: 'Intermedio', hard: 'Avanzado' };
-            badge.innerText = `Dificultad: ${labels[diff]}`;
-
+            document.getElementById('badge-difficulty').innerText = `Dificultad: ${labels[diff]}`;
             generateNewExercise();
         }
 
@@ -283,150 +278,47 @@
             document.getElementById('solution-container').classList.add('hidden');
             document.getElementById('sol-btn-text').innerText = "Ver Solución Paso a Paso";
 
-            const k = Math.floor(Math.random() * 4) + 2;
-            const p = Math.floor(Math.random() * 3) + 2;
-            const templates = [];
+            const k = Math.floor(Math.random() * 8) + 2;
+            const p = Math.floor(Math.random() * 5) + 2;
+            const variantType = Math.floor(Math.random() * 3); // Para generar estructuras distintas
 
-            // Banco Generador Dinámico por ID de Clase y Dificultad
-            switch (currentTopic.id) {
-                // INTEGRALES IMPROPIAS
-                case 'c1': // Tipo I
+            let selected = { problem: 'Cargando...', solution: 'Cargando...' };
+
+            // Lógica por Curso y Tema
+            if (currentCourse === 'MAT1620') {
+                if (currentTopic.id === 'c1_mat1620') {
                     if (currentDifficulty === 'easy') {
-                        templates.push({
-                            problem: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`,
-                            solution: `1. Reescribir como límite:\n$$\\lim_{t \\to \\infty} \\int_{1}^{t} ${k}x^{-${p}} \\, dx$$\n\n2. Antiderivada:\n$$\\left[ -\\frac{${k}}{${p-1}x^{${p-1}}} \\right]_{1}^{t}$$\n\n3. Límite:\n$$\\lim_{t \\to \\infty} \\left( -\\frac{${k}}{${p-1}t^{${p-1}}} \\right) + \\frac{${k}}{${p-1}} = \\frac{${k}}{${p-1}}$$\n\n**Resultado:** Converge a $\\frac{${k}}{${p-1}}$.`
-                        });
-                    } else if (currentDifficulty === 'medium') {
-                        templates.push({
-                            problem: `\\int_{0}^{\\infty} x e^{-${k}x} \\, dx`,
-                            solution: `1. Integración por partes: $u = x, dv = e^{-${k}x}dx \\Rightarrow v = -\\frac{1}{${k}}e^{-${k}x}$.\n2. Antiderivada: $-\\frac{x}{${k}}e^{-${k}x} - \\frac{1}{${k*k}}e^{-${k}x}$.\n3. Evaluar de $0$ a $\\infty$ da $\\frac{1}{${k*k}}$.\n\n**Resultado:** Converge a $\\frac{1}{${k*k}}$.`
-                        });
-                    } else {
-                        templates.push({
-                            problem: `\\int_{2}^{\\infty} \\frac{dx}{x \\ln(x)^{${p}}}`,
-                            solution: `1. Sustitución $u = \\ln(x) \\Rightarrow du = \\frac{dx}{x}$.\n2. Integral: $\\int_{\\ln 2}^{\\infty} u^{-${p}} du = \\frac{1}{${p-1}(\\ln 2)^{${p-1}}}$.\n\n**Resultado:** Converge.`
-                        });
+                        // 3 Variantes Estructurales para un mismo nivel
+                        if (variantType === 0) selected = { problem: `\\int_{1}^{\\infty} \\frac{${k}}{x^{${p}}} \\, dx`, solution: `Paso 1: Resolver mediante límite.` };
+                        else if (variantType === 1) selected = { problem: `\\int_{0}^{\\infty} e^{-${k}x} \\, dx`, solution: `Paso 1: Integral de función exponencial infinita.` };
+                        else selected = { problem: `\\int_{2}^{\\infty} \\frac{1}{x^{${p/2}}} \\, dx`, solution: `Paso 1: Aplicar regla de potencias.` };
                     }
-                    break;
-
-                case 'c2': // Tipo II
-                    templates.push({
-                        problem: `\\int_{0}^{${k}} \\frac{dx}{\\sqrt{${k} - x}}`,
-                        solution: `1. Asíntota en $x = ${k}$. Plantear límite:\n$$\\lim_{t \\to ${k}^-} \\int_{0}^{t} (${k} - x)^{-1/2} dx$$\n\n2. Antiderivada: $\\left[ -2\\sqrt{${k} - x} \\right]_0^t = -2\\sqrt{${k}-t} + 2\\sqrt{${k}}$.\n3. Tomar el límite cuando $t \\to ${k}^-$ nos da $2\\sqrt{${k}}$.\n\n**Resultado:** Converge a $2\\sqrt{${k}}$.`
-                    });
-                    break;
-
-                // SUCESIONES Y SERIES
-                case 'c4': // Sucesiones y Límites
-                    templates.push({
-                        problem: `a_n = \\frac{${k}n^2 + 5}{${p}n^2 + n}`,
-                        solution: `1. Dividir numerador y denominador por $n^2$:\n$$\\lim_{n \\to \\infty} \\frac{${k} + \\frac{5}{n^2}}{${p} + \\frac{1}{n}} = \\frac{${k}}{${p}}$$\n\n**Resultado:** La sucesión converge a $\\frac{${k}}{${p}}$.`
-                    });
-                    break;
-
-                case 'c6': // Series y Sumas Parciales
-                    templates.push({
-                        problem: `\\sum_{n=1}^{\\infty} \\left( \\frac{1}{${k}} \\right)^n`,
-                        solution: `1. Serie geométrica con $a = 1/${k}$ y razón $r = 1/${k}$.\n2. Como $|r| < 1$, la serie converge.\n3. Suma: $S = \\frac{a}{1 - r} = \\frac{1/${k}}{1 - 1/${k}} = \\frac{1}{${k-1}}$.\n\n**Resultado:** Converge a $\\frac{1}{${k-1}}$.`
-                    });
-                    break;
-
-                case 'c10': // Criterios Raíz y Razón
-                    templates.push({
-                        problem: `\\sum_{n=1}^{\\infty} \\frac{(${k})^n}{n!}`,
-                        solution: `1. Criterio de la Razón:\n$$L = \\lim_{n \\to \\infty} \\frac{${k}^{n+1}}{(n+1)!} \\cdot \\frac{n!}{${k}^n} = \\lim_{n \\to \\infty} \\frac{${k}}{n+1} = 0$$\n2. Como $L = 0 < 1$, la serie **converge absolutamente**.`
-                    });
-                    break;
-
-                // VECTORES Y PLANOS (R3)
-                case 'c15': // Producto Punto y Cruz
-                    templates.push({
-                        problem: `\\vec{u} = \\langle ${k}, 1, -2 \\rangle, \\quad \\vec{v} = \\langle 0, ${p}, 3 \\rangle \\quad \\text{Calcular } \\vec{u} \\cdot \\vec{v}`,
-                        solution: `1. Producto escalar:\n$$\\vec{u} \\cdot \\vec{v} = (${k})(0) + (1)(${p}) + (-2)(3) = 0 + ${p} - 6 = ${p - 6}$$\n\n**Resultado:** ${p - 6}.`
-                    });
-                    break;
-
-                case 'c16': // Rectas y Planos
-                    templates.push({
-                        problem: `\\text{Plano que pasa por } P(0,0,0) \\text{ con normal } \\vec{n} = \\langle ${k}, -${p}, 1 \\rangle`,
-                        solution: `1. Ecuación del plano: $a(x-x_0) + b(y-y_0) + c(z-z_0) = 0$.\n2. Sustituir:\n$$${k}x - ${p}y + z = 0$$\n\n**Resultado:** $${k}x - ${p}y + z = 0$.`
-                    });
-                    break;
-
-                // DERIVADAS PARCIALES Y GRADIENTE
-                case 'c21': // Derivadas Parciales
-                    templates.push({
-                        problem: `f(x, y) = ${k}x^3 y^2 - ${p}x + y^4`,
-                        solution: `1. Respecto a $x$ ($y$ cte):\n$$f_x = ${k*3}x^2 y^2 - ${p}$$\n\n2. Respecto a $y$ ($x$ cte):\n$$f_y = ${k*2}x^3 y + 4y^3$$`
-                    });
-                    break;
-
-                case 'c26': // Gradiente
-                    templates.push({
-                        problem: `f(x, y) = x^2 y + ${k}x \\quad \\text{en } P(1, 2)`,
-                        solution: `1. Derivadas parciales:\n$$f_x = 2xy + ${k}, \\quad f_y = x^2$$\n2. Evaluar en $(1,2)$:\n$$f_x(1,2) = 2(1)(2) + ${k} = ${4+k}, \\quad f_y(1,2) = 1$$\n\n**Resultado:** $\\nabla f(1,2) = \\langle ${4+k}, 1 \\rangle$.`
-                    });
-                    break;
-
-                case 'c27': // Puntos Críticos
-                case 'c28':
-                    templates.push({
-                        problem: `f(x, y) = x^2 + y^2 - ${2*k}x`,
-                        solution: `1. Derivadas parciales:\n$$f_x = 2x - ${2*k} = 0 \\Rightarrow x = ${k}$$\n$$f_y = 2y = 0 \\Rightarrow y = 0$$\n2. Punto crítico: $(${k}, 0)$.\n3. Matriz Hessiana $D = f_{xx}f_{yy} - f_{xy}^2 = (2)(2) - 0 = 4 > 0$.\n4. Como $f_{xx} > 0$, es un **Mínimo Local** en $(${k}, 0)$.`
-                    });
-                    break;
-
-                // INTEGRALES MÚLTIPLES
-                case 'c32': // Integrales Dobles Rectángulos
-                    templates.push({
-                        problem: `\\int_{0}^{${k}} \\int_{0}^{1} (${p}x + y) \\, dy \\, dx`,
-                        solution: `1. Integrar respecto a $y$:\n$$\\int_{0}^{1} (${p}x + y) dy = \\left[ ${p}xy + \\frac{y^2}{2} \\right]_0^1 = ${p}x + \\frac{1}{2}$$\n2. Integrar respecto a $x$:\n$$\\int_{0}^{${k}} \\left(${p}x + \\frac{1}{2}\\right) dx = \\left[ \\frac{${p}x^2}{2} + \\frac{x}{2} \\right]_0^{${k}} = \\frac{${p*k*k} + ${k}}{2}$$`
-                    });
-                    break;
-
-                case 'c35': // Polares
-                    templates.push({
-                        problem: `\\iint_R (x^2 + y^2) \\, dA \\quad R: x^2 + y^2 \\le ${k*k}`,
-                        solution: `1. Pasar a polares: $r \\in [0, ${k}], \\theta \\in [0, 2\\pi]$, $dA = r \\, dr \\, d\\theta$.\n2. Sustituir $x^2 + y^2 = r^2$:\n$$\\int_{0}^{2\\pi} d\\theta \\int_{0}^{${k}} r^3 \\, dr = (2\\pi) \\left[ \\frac{r^4}{4} \\right]_0^{${k}} = \\frac{${Math.pow(k,4)}\\pi}{2}$$`
-                    });
-                    break;
-
-                case 'c39': // Esféricas
-                    templates.push({
-                        problem: `\\iiint_E dV \\quad \\text{Esfera } x^2 + y^2 + z^2 \\le ${k*k}`,
-                        solution: `1. Coordenadas esféricas: $\\rho \\in [0, ${k}], \\theta \\in [0, 2\\pi], \\phi \\in [0, \\pi]$.\n2. Jacobiano $dV = \\rho^2 \\sin\\phi \\, d\\rho \\, d\\theta \\, d\\phi$.\n$$\\int_{0}^{2\\pi} d\\theta \\int_{0}^{\\pi} \\sin\\phi \\, d\\phi \\int_{0}^{${k}} \\rho^2 \\, d\\rho = (2\\pi)(2)\\left( \\frac{${k}^3}{3} \\right) = \\frac{4\\pi ${k*k*k}}{3}$$`
-                    });
-                    break;
-
-                // DEFAULT DINÁMICO POR CAPÍTULO
-                default:
-                    if (currentTopic.chap === 1) {
-                        templates.push({
-                            problem: `a_n = \\frac{n + ${k}}{${p}n + 1}`,
-                            solution: `1. Límite al infinito:\n$$\\lim_{n \\to \\infty} \\frac{n + ${k}}{${p}n + 1} = \\frac{1}{${p}}$$\n\n**Resultado:** La sucesión converge a $\\frac{1}{${p}}$.`
-                        });
-                    } else if (currentTopic.chap === 2) {
-                        templates.push({
-                            problem: `f(x, y) = ${k}x^2 + ${p}y^2`,
-                            solution: `1. Derivadas parciales:\n$$f_x = ${2*k}x, \\quad f_y = ${2*p}y$$\n2. Gradiente: $\\nabla f(x, y) = \\langle ${2*k}x, ${2*p}y \\rangle$.`
-                        });
-                    } else {
-                        templates.push({
-                            problem: `\\int_{0}^{1} \\int_{0}^{${k}} ${p}xy \\, dx \\, dy`,
-                            solution: `1. Integrar respecto a $x$:\n$$\\int_{0}^{${k}} ${p}xy \\, dx = \\left[ \\frac{${p}x^2 y}{2} \\right]_0^{${k}} = \\frac{${p*k*k}y}{2}$$\n2. Integrar respecto a $y$:\n$$\\int_{0}^{1} \\frac{${p*k*k}y}{2} dy = \\frac{${p*k*k}}{4}$$`
-                        });
-                    }
-                    break;
+                }
+            } 
+            else if (currentCourse === 'MAT1203') {
+                if (currentTopic.id === 'c1_mat1203') {
+                    if (variantType === 0) selected = { problem: `\\vec{u} = \\langle ${k}, -${p}, 1 \\rangle, \\vec{v} = \\langle 0, ${k}, ${p} \\rangle. \\text{ Calcule } \\vec{u} \\cdot \\vec{v}`, solution: `Producto escalar componente a componente.` };
+                    else if (variantType === 1) selected = { problem: `\\text{Halle la norma de } \\vec{w} = \\langle ${k}, 0, ${p} \\rangle`, solution: `Aplicar raíz cuadrada de la suma de componentes al cuadrado.` };
+                    else selected = { problem: `\\text{Determine si } \\langle ${k}, ${p} \\rangle \\text{ y } \\langle -${p}, ${k} \\rangle \\text{ son ortogonales.}`, solution: `El producto punto da cero, por lo tanto son ortogonales.` };
+                }
+            }
+            else if (currentCourse === 'FIS1514') {
+                if (currentTopic.id === 'c1_fis1514') {
+                    if (variantType === 0) selected = { problem: `x(t) = ${k}t^2 - ${p}t + 5. \\text{ Halle } v(t)`, solution: `Derivar $x(t)$ respecto al tiempo: $v(t) = ${2*k}t - ${p}$.` };
+                    else if (variantType === 1) selected = { problem: `v(t) = ${k} \\sin(${p}t). \\text{ Halle aceleración } a(t)`, solution: `Derivada de la velocidad: $a(t) = ${k*p}\\cos(${p}t)$.` };
+                    else selected = { problem: `a(t) = ${k}. \\text{ Si } v(0)=${p}, \\text{ halle } v(t)`, solution: `Integrar $a(t)$: $v(t) = ${k}t + ${p}$.` };
+                }
             }
 
-            const selected = templates[Math.floor(Math.random() * templates.length)];
+            // Fallback si no hay ejercicio definido para ese cruce
+            if(selected.problem === 'Cargando...') {
+                selected = { problem: `\\text{Ejercicio en construcción para } k=${k}, p=${p}`, solution: `Próximamente.` };
+            }
 
-            // Renderizar Enunciado
             const problemDiv = document.getElementById('math-problem');
             problemDiv.innerHTML = `\\[ ${selected.problem} \\]`;
             renderMathInBox(problemDiv);
 
-            // Guardar HTML de Markdown en la solución
             const solBox = document.getElementById('solution-box');
             solBox.innerHTML = marked.parse(selected.solution);
         }
